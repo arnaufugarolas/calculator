@@ -25,29 +25,44 @@ function addEvents () {
         const button = buttons[i]
 
         if (button.classList.contains('number')) {
-            if (button.value === ',') {
+            if (button.id === ',') {
                 button.addEventListener('click', function () {
                     result.value += ','
                 })
             } else {
                 button.addEventListener('click', function () {
                     if (result.value[0] === '0' && result.value.length === 1) {
-                        result.value = button.value
+                        result.value = button.id
                     } else {
-                        result.value += button.value
+                        result.value += button.id
                     }
                 })
             }
         } else if (button.classList.contains('operator')) {
-            if (button.value === 'C') {
+            if (button.id === 'C') {
                 button.addEventListener('click', function () {
                     result.value = 0
                 })
-            } else if (button.value === '+/-') {
+            } else if (button.id === '+/-') {
                 button.addEventListener('click', function () {
                     result.value = result.value * -1
                 })
+            } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
+                button.addEventListener('click', function () {
+                    highlight(button)
+                })
             }
         }
+    }
+
+    function highlight (button) {
+        const buttons = document.getElementsByClassName('button')
+
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].classList.contains('highlighted')) {
+                buttons[i].classList.remove('highlighted')
+            }
+        }
+        button.classList.add('highlighted')
     }
 }
