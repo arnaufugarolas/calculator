@@ -35,7 +35,7 @@ function addEvents () {
                 })
             } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
                 button.addEventListener('click', function () {
-                    highlightKey(button)
+                    highlightKey(button.id)
                 })
             } else if (button.id === '=') {
                 button.addEventListener('click', function () {
@@ -46,8 +46,6 @@ function addEvents () {
     }
 
     document.addEventListener('keydown', function (event) {
-        console.log(event)
-
         if (event.key === ',') {
             addPointToResult()
         } else if (event.key >= 0 && event.key <= 9) {
@@ -56,6 +54,8 @@ function addEvents () {
             clearResult()
         } else if (event.key === 'Control') {
             changeResultSign()
+        } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
+            highlightKey(event.key)
         }
     })
 }
@@ -87,7 +87,7 @@ function changeResultSign () {
 
 function highlightKey (button) {
     unHighlightKeys()
-    button.classList.add('highlighted')
+    document.getElementById(button).classList.add('highlighted')
 }
 
 function unHighlightKeys () {
