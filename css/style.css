@@ -17,7 +17,7 @@ body {
 
 .display-box {
     font-family: 'Orbitron', sans-serif;
-    background-color: #a9bcd0;
+    background-color: #A9BCD0;
     border: solid #1b1b1e 0.5px;
     color: #1b1b1e;
     border-radius: 5px;
@@ -35,4 +35,13 @@ input[type=button] {
     border-radius: 5px;
     height: 70%;
     outline: none;
+    opacity: 70%;
+}
+
+.highlighted {
+    opacity: 100% !important;
+}
+
+.disabled {
+    opacity: 30% !important;
 }
