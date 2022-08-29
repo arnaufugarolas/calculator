@@ -42,6 +42,7 @@ function addEvents () {
             if (button.id === 'C') {
                 button.addEventListener('click', function () {
                     result.value = 0
+                    unHighlight()
                 })
             } else if (button.id === '+/-') {
                 button.addEventListener('click', function () {
@@ -51,11 +52,20 @@ function addEvents () {
                 button.addEventListener('click', function () {
                     highlight(button)
                 })
+            } else if (button.id === '=') {
+                button.addEventListener('click', function () {
+                    unHighlight()
+                })
             }
         }
     }
 
     function highlight (button) {
+        unHighlight()
+        button.classList.add('highlighted')
+    }
+
+    function unHighlight () {
         const buttons = document.getElementsByClassName('button')
 
         for (let i = 0; i < buttons.length; i++) {
@@ -63,6 +73,5 @@ function addEvents () {
                 buttons[i].classList.remove('highlighted')
             }
         }
-        button.classList.add('highlighted')
     }
 }
