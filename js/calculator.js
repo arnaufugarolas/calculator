@@ -1,5 +1,5 @@
 function loadCalculator () {
-    clearResult()
+    clearDisplay()
 
     document.getElementById('+/-').classList.add('disabled')
     document.getElementById('0').classList.add('disabled')
@@ -9,7 +9,7 @@ function loadCalculator () {
 
 function addEvents () {
     const buttons = document.getElementsByClassName('button')
-    const result = document.getElementById('result')
+    const display = document.getElementById('display')
 
     for (let i = 0; i < buttons.length; i++) {
         const button = buttons[i]
@@ -17,21 +17,21 @@ function addEvents () {
         if (button.classList.contains('number')) {
             if (button.id === ',') {
                 button.addEventListener('click', function () {
-                    addPointToResult()
+                    addPointToDisplay()
                 })
             } else {
                 button.addEventListener('click', function () {
-                    addNumberToResult(button.id)
+                    addNumberToDisplay(button.id)
                 })
             }
         } else if (button.classList.contains('operator')) {
             if (button.id === 'C') {
                 button.addEventListener('click', function () {
-                    clearResult()
+                    clearDisplay()
                 })
             } else if (button.id === '+/-') {
                 button.addEventListener('click', function () {
-                    changeResultSign()
+                    changeDisplaySign()
                 })
             } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
                 button.addEventListener('click', function () {
@@ -47,42 +47,42 @@ function addEvents () {
 
     document.addEventListener('keydown', function (event) {
         if (event.key === ',') {
-            addPointToResult()
+            addPointToDisplay()
         } else if (event.key >= 0 && event.key <= 9) {
-            addNumberToResult(event.key)
+            addNumberToDisplay(event.key)
         } else if (event.key === 'Escape') {
-            clearResult()
+            clearDisplay()
         } else if (event.key === 'Control') {
-            changeResultSign()
+            changeDisplaySign()
         } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
             highlightKey(event.key)
         }
     })
 }
 
-function clearResult () {
+function clearDisplay () {
     unHighlightKeys()
-    document.getElementById('result').value = 0
+    document.getElementById('display').value = 0
 }
 
-function addPointToResult () {
-    document.getElementById('result').value += ','
+function addPointToDisplay () {
+    document.getElementById('display').value += ','
 }
 
-function addNumberToResult (number) {
-    const result = document.getElementById('result')
+function addNumberToDisplay (number) {
+    const display = document.getElementById('display')
 
-    if (result.value[0] === '0' && result.value.length === 1) {
-        result.value = number
+    if (display.value[0] === '0' && display.value.length === 1) {
+        display.value = number
     } else {
-        result.value += number
+        display.value += number
     }
 }
 
-function changeResultSign () {
-    const result = document.getElementById('result')
+function changeDisplaySign () {
+    const display = document.getElementById('display')
 
-    result.value = result.value * -1
+    display.value = display.value * -1
 }
 
 function highlightKey (button) {

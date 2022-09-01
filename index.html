@@ -8,35 +8,35 @@
 <body onload="loadCalculator()">
 <table class="calculator" >
     <tr>
-        <td colspan="4"><label for="result"></label><input class="display-box" type="text" id="result" disabled /> </td>
+        <td colspan="4"><label for="display"></label><input class="display-box" data-testid="display" type="text" id="display" disabled /> </td>
     </tr>
     <tr>
-        <td> <input type="button" value="C" id="C" class="button operator" /> </td>
-        <td colspan="2"> <input type="button" value="+/-" id="+/-" class="button operator" /> </td>
-        <td> <input type="button" value="/" id="/" class="button operator" /> </td>
+        <td> <input type="button" value="C" id="C" data-testid="C" class="button operator" /> </td>
+        <td colspan="2"> <input type="button" value="+/-" id="+/-" data-testid="+/-" class="button operator" /> </td>
+        <td> <input type="button" value="/" id="/" data-testid="/" class="button operator" /> </td>
     </tr>
     <tr>
-        <td> <input type='button' value="1" id="1" class="button number" /> </td>
-        <td> <input type="button" value="2" id="2" class="button number" /> </td>
-        <td> <input type="button" value="3" id="3" class="button number" /> </td>
-        <td> <input type="button" value="-" id="-" class="button operator" /> </td>
+        <td> <input type='button' value="1" id="1" data-testid="1" class="button number" /> </td>
+        <td> <input type="button" value="2" id="2" data-testid="2" class="button number" /> </td>
+        <td> <input type="button" value="3" id="3" data-testid="3" class="button number" /> </td>
+        <td> <input type="button" value="-" id="-" data-testid="-" class="button operator" /> </td>
     </tr>
     <tr>
-        <td> <input type="button" value="4" id="4" class="button number" /> </td>
-        <td> <input type="button" value="5" id="5" class="button number" /> </td>
-        <td> <input type="button" value="6" id="6" class="button number" /> </td>
-        <td> <input type="button" value="+" id="+" class="button operator" /> </td>
+        <td> <input type="button" value="4" id="4" data-testid="4" class="button number" /> </td>
+        <td> <input type="button" value="5" id="5" data-testid="5" class="button number" /> </td>
+        <td> <input type="button" value="6" id="6" data-testid="6" class="button number" /> </td>
+        <td> <input type="button" value="+" id="+" data-testid="+" class="button operator" /> </td>
     </tr>
     <tr>
-        <td> <input type="button" value="7" id="7" class="button number" /> </td>
-        <td> <input type="button" value="8" id="8" class="button number" /> </td>
-        <td> <input type="button" value="9" id="9" class="button number" /> </td>
-        <td> <input type="button" value="*" id="*" class="button operator" /> </td>
+        <td> <input type="button" value="7" id="7" data-testid="7" class="button number" /> </td>
+        <td> <input type="button" value="8" id="8" data-testid="8" class="button number" /> </td>
+        <td> <input type="button" value="9" id="9" data-testid="9" class="button number" /> </td>
+        <td> <input type="button" value="*" id="*" data-testid="*" class="button operator" /> </td>
     </tr>
     <tr>
-        <td> <input type="button" value="," id="," class="button number" /> </td>
-        <td> <input type="button" value="0" id="0" class="button number" /> </td>
-        <td colspan="2"> <input type="button" value="=" id="=" class="button operator" /> </td>
+        <td> <input type="button" value="," id="," data-testid="," class="button number" /> </td>
+        <td> <input type="button" value="0" id="0" data-testid="0" class="button number" /> </td>
+        <td colspan="2"> <input type="button" value="=" id="=" data-testid="=" class="button operator" /> </td>
     </tr>
 </table>
 </body>
