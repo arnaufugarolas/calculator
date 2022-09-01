@@ -97,6 +97,8 @@ function addPointToDisplay () {
 
     if (display.value === 'Error') {
         return
+    } else if (display.value.replace(/[^0-9]/g, '').length === 10) {
+        return
     }
 
     document.getElementById('display').value += ','
@@ -106,6 +108,10 @@ function addPointToDisplay () {
 
 function addNumberToDisplay (number) {
     const display = document.getElementById('display')
+
+    if (display.value.replace(/[^0-9]/g, '').length === 10) {
+        return
+    }
 
     if ((display.value[0] === '0' && display.value.length === 1) || display.value === 'Error') {
         display.value = number
@@ -121,6 +127,8 @@ function addOperatorToDisplay (operator) {
 
     display.value += operator
     highlightKey(operator)
+
+    checkDisplay()
 }
 
 function changeDisplaySign () {
@@ -188,8 +196,12 @@ function changeOperatorsState (state) {
 
 function checkDisplay () {
     const display = document.getElementById('display')
+    console.log(display.value.match('[+]'))
     if (display.value === 'Error') {
         console.log('Error')
+        changeOperatorsState(false)
+        changeKeyState('C', true)
+    } else if (display.value.match('[+]$')) {
         changeOperatorsState(false)
         changeKeyState('C', true)
     } else if (display.value === '0') {
@@ -201,9 +213,6 @@ function checkDisplay () {
         changeKeyState('C', true)
         changeKeyState('+/-', true)
         changeKeyState('0', true)
-    } else if (display.value.match('[0-9],.*$')) {
-        changeOperatorsState(true)
-        changeKeyState(',', false)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)
