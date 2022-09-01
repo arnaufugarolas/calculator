@@ -9,7 +9,6 @@ function loadCalculator () {
 
 function addEvents () {
     const buttons = document.getElementsByClassName('button')
-    const display = document.getElementById('display')
 
     for (let i = 0; i < buttons.length; i++) {
         const button = buttons[i]
@@ -35,6 +34,7 @@ function addEvents () {
                 })
             } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
                 button.addEventListener('click', function () {
+                    addOperatorToDisplay(button.id)
                     highlightKey(button.id)
                 })
             } else if (button.id === '=') {
@@ -55,7 +55,10 @@ function addEvents () {
         } else if (event.key === 'Control') {
             changeDisplaySign()
         } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
+            addOperatorToDisplay(event.key)
             highlightKey(event.key)
+        } else if (event.key === 'Enter') {
+            calculate()
         }
     })
 }
@@ -72,11 +75,17 @@ function addPointToDisplay () {
 function addNumberToDisplay (number) {
     const display = document.getElementById('display')
 
-    if (display.value[0] === '0' && display.value.length === 1) {
+    if ((display.value[0] === '0' && display.value.length === 1) || display.value === 'Error') {
         display.value = number
     } else {
         display.value += number
     }
+}
+
+function addOperatorToDisplay (operator) {
+    const display = document.getElementById('display')
+
+    display.value += operator
 }
 
 function changeDisplaySign () {
@@ -98,4 +107,19 @@ function unHighlightKeys () {
             buttons[i].classList.remove('highlighted')
         }
     }
+}
+
+function calculate () {
+    const display = document.getElementById('display')
+    const expression = display.value
+    let result = 'Error'
+
+    if (expression.match(/[+\-*/]/)) {
+        if (!expression.charAt(expression.length - 1).match(/[+\-*/]/)) {
+            result = eval(expression)
+        }
+    }
+
+    display.value = result
+    unHighlightKeys()
 }
