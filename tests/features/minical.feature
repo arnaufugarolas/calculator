@@ -73,3 +73,14 @@ Scenario Outline: Unhighlighting operators screen buttons
       |            -1| Right Ctrl |             1 |
       |             1| Right Ctrl |            -1 |
       |             1|  Left Ctrl |            -1 |
+
+Scenario Outline: Pressing operators keys
+  When the user press the <Key> key
+  Then the <Key> button should be highlighted
+
+  Examples:
+    |Key   |
+    |   +  |
+    |   -  |
+    |   /  |
+    |   *  |

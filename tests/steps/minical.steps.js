@@ -80,6 +80,11 @@ When(/^the user press the (.*) key$/, async (key) => {
     }
 })
 
+Then(/^the (.*) button should be highlighted$/, async (key) => {
+    const button = await getButton(key)
+    expect(await button.getAttribute('class')).toContain('highlighted')
+})
+
 async function getButtons () {
     const locatorButtons = await page.locator('[data-testid]')
     const buttons = []
