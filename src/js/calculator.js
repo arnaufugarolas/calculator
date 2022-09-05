@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function loadCalculator () {
     clearDisplay()
     addEvents()
@@ -178,10 +179,8 @@ function changeKeyState (keyId, state) {
     const key = document.getElementById(keyId)
     if (state && key.classList.contains('disabled')) {
         key.classList.remove('disabled')
-        // key.disabled = false
     } else if (!state && !key.classList.contains('disabled')) {
         key.classList.add('disabled')
-        // key.disabled = true
     }
 }
 
@@ -217,6 +216,28 @@ function checkDisplay () {
         changeKeyState('C', true)
         changeKeyState('0', true)
         changeKeyState('+/-', false)
+    } else if (display.value.match(',')) {
+        let expression = display.value
+        const copy = expression
+
+        expression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
+        const numbers = copy.split(/[^0-9,]+/)
+        const operators = expression.split('#').filter(function (n) { return n })
+        const result = []
+
+        for (i = 0; i < numbers.length; i++) {
+            result.push(numbers[i])
+            if (i < operators.length) result.push(operators[i])
+        }
+
+        if (result.length === 1) {
+            changeOperatorsState(true)
+            changeKeyState(',', false)
+        } else {
+            changeOperatorsState(true)
+        }
+
+        console.log(result)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)
