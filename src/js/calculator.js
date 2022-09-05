@@ -1,9 +1,5 @@
 function loadCalculator () {
     clearDisplay()
-
-    document.getElementById('+/-').classList.add('disabled')
-    document.getElementById('0').classList.add('disabled')
-
     addEvents()
 }
 
@@ -86,10 +82,10 @@ function addEvents () {
 }
 
 function clearDisplay () {
-    unHighlightKeys()
     document.getElementById('display').value = 0
 
     checkDisplay()
+    unHighlightKeys()
 }
 
 function addPointToDisplay () {
