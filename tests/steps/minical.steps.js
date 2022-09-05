@@ -21,7 +21,7 @@ Then(/^no button should be highlighted$/, async () => {
 })
 
 Then(/^all buttons should be enabled except (.*) and (.*)$/, async (disabledButton01, disabledButton02) => {
-    const disabledButtons = [disabledButton01.replaceAll('\'', ''), disabledButton02.replaceAll('\'', '')]
+    const disabledButtons = [disabledButton01, disabledButton02]
 
     const buttons = await getButtons()
 
@@ -49,6 +49,18 @@ When(/^the user press the (.*) button$/, async (key) => {
     const button = await getButton(key)
 
     await button.click()
+})
+
+Then(/^just the operator (.*) button should be highlighted$/, async (key) => {
+    const buttons = await getButtons()
+
+    for (const button of buttons) {
+        if (await button.inputValue() === key) {
+            expect(await button.getAttribute('class')).toContain('highlighted')
+        } else {
+            expect(await button.getAttribute('class')).not.toContain('highlighted')
+        }
+    }
 })
 
 async function getButtons () {
