@@ -63,6 +63,14 @@ Then(/^just the operator (.*) button should be highlighted$/, async (key) => {
     }
 })
 
+Then(/^all the operators buttons should be unhighlighted$/, async () => {
+    const operators = await getOperators()
+
+    for (const operator of operators) {
+        expect(await operator.getAttribute('class')).not.toContain('highlighted')
+    }
+})
+
 async function getButtons () {
     const locatorButtons = await page.locator('[data-testid]')
     const buttons = []
@@ -74,6 +82,19 @@ async function getButtons () {
     }
 
     return buttons
+}
+
+async function getOperators () {
+    const locatorButtons = await page.locator('[data-testid]')
+    const operators = []
+
+    for (let i = 0; i < await locatorButtons.count(); i++) {
+        if ((await locatorButtons.nth(i).getAttribute('data-testid')).includes('operator')) {
+            operators.push(await locatorButtons.nth(i))
+        }
+    }
+
+    return operators
 }
 
 async function getButton (key) {

@@ -40,3 +40,12 @@ Scenario Outline: Clicking operators screen buttons
     |   -  |
     |   /  |
     |   *  |
+
+Scenario Outline: Unhighlighting operators screen buttons
+  When the user press the <button> button
+  Then all the operators buttons should be unhighlighted
+
+  Examples:
+    |button|
+    |   =  |
+    |   C  |
