@@ -178,10 +178,8 @@ function changeKeyState (keyId, state) {
     const key = document.getElementById(keyId)
     if (state && key.classList.contains('disabled')) {
         key.classList.remove('disabled')
-        // key.disabled = false
     } else if (!state && !key.classList.contains('disabled')) {
         key.classList.add('disabled')
-        // key.disabled = true
     }
 }
 
