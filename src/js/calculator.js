@@ -120,10 +120,13 @@ function addNumberToDisplay (number) {
 
 function addOperatorToDisplay (operator) {
     const display = document.getElementById('display')
-
-    display.value += operator
+    console.log(operator)
+    if (display.value === '0' && operator === '-') {
+        display.value = operator
+    } else {
+        display.value += operator
+    }
     highlightKey(operator)
-
     checkDisplay()
 }
 
@@ -192,7 +195,6 @@ function changeOperatorsState (state) {
 
 function checkDisplay () {
     const display = document.getElementById('display')
-    console.log(display.value.match('[+]'))
     if (display.value === 'Error') {
         console.log('Error')
         changeOperatorsState(false)
@@ -209,6 +211,12 @@ function checkDisplay () {
         changeKeyState('C', true)
         changeKeyState('+/-', true)
         changeKeyState('0', true)
+    } else if (display.value === '-' && display.value.length === 1) {
+        console.log('minus')
+        changeOperatorsState(false)
+        changeKeyState('C', true)
+        changeKeyState('0', true)
+        changeKeyState('+/-', false)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)

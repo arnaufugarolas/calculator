@@ -53,7 +53,7 @@ Examples:
 Scenario Outline: Pressing non-operators keys
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the <Key> key
-Then in the display screen should be show a <Button>
+Then in the display screen should be show a <resultDisplay>
 
 Examples:
 |numberOnScreen|Key   | resultDisplay |

@@ -49,3 +49,27 @@ Scenario Outline: Unhighlighting operators screen buttons
     |button|
     |   =  |
     |   C  |
+
+  Scenario Outline: Pressing non-operators keys
+    Given in the display screen the number <numberOnScreen> is shown
+    When the user press the <Key> key
+    Then in the display screen should be show a <resultDisplay>
+
+    Examples:
+      |numberOnScreen|Key   | resultDisplay |
+      |             1|   0  |            10 |
+      |             0|   1  |             1 |
+      |             0|   2  |             2 |
+      |             0|   3  |             3 |
+      |             0|   4  |             4 |
+      |             0|   5  |             5 |
+      |             0|   6  |             6 |
+      |             0|   7  |             7 |
+      |             0|   8  |             8 |
+      |             0|   9  |             9 |
+      |             0|   ,  |            0, |
+      |             1|  ESC |             0 |
+      |            -1|  Left Ctrl |             1 |
+      |            -1| Right Ctrl |             1 |
+      |             1| Right Ctrl |            -1 |
+      |             1|  Left Ctrl |            -1 |

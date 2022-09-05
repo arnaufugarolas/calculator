@@ -5,6 +5,7 @@ const url = 'http://localhost:8080/calculator/src/index.html'
 
 Given(/^a user opens the app$/, async () => {
     await page.goto(url)
+    await page.waitForLoadState('networkidle')
 })
 
 Then(/^in the display screen should be show a (.*)$/, async (value) => {
@@ -41,14 +42,12 @@ Then(/^all buttons should be enabled except (.*) and (.*)$/, async (disabledButt
 
 Given(/^in the display screen the number (.*) is shown$/, async (numberOnScreen) => {
     const display = await page.locator('[data-testid="display"]')
-    await display.type(numberOnScreen.toString())
-    expect(await display.inputValue()).toBe(numberOnScreen.toString())
+    await display.type(numberOnScreen)
+    expect(await display.inputValue()).toBe(numberOnScreen)
 })
 
 When(/^the user press the (.*) button$/, async (key) => {
-    const button = await getButton(key)
-
-    await button.click()
+    await (await getButton(key)).click()
 })
 
 Then(/^just the operator (.*) button should be highlighted$/, async (key) => {
@@ -68,6 +67,16 @@ Then(/^all the operators buttons should be unhighlighted$/, async () => {
 
     for (const operator of operators) {
         expect(await operator.getAttribute('class')).not.toContain('highlighted')
+    }
+})
+
+When(/^the user press the (.*) key$/, async (key) => {
+    if (key === 'ESC') {
+        await page.keyboard.press('Escape')
+    } else if (key === 'Left Ctrl' || key === 'Right Ctrl') {
+        await page.keyboard.down('Control')
+    } else {
+        await page.keyboard.press(key)
     }
 })
 
