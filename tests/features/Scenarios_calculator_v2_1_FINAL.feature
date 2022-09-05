@@ -1,8 +1,8 @@
 Feature: Calculator
 
-Background: 
+Background:
     Given a user opens the app
-    
+
 Scenario: Default display screen
 Then in the display screen should be show a 0
 And no button should be highlighted
@@ -32,7 +32,7 @@ Examples:
 
 Scenario Outline: Clicking operators screen buttons
 When the user press the <button> button
-Then just the operator <button> button should be highlighted 
+Then just the operator <button> button should be highlighted
 
 Examples:
 |button|
@@ -53,7 +53,7 @@ Examples:
 Scenario Outline: Pressing non-operators keys
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the <Key> key
-Then in the display screen should be show a <Button>
+Then in the display screen should be show a <resultDisplay>
 
 Examples:
 |numberOnScreen|Key   | resultDisplay |
@@ -93,14 +93,14 @@ And the user presses the 3 key
 When the user presses the enter key
 Then the display should show a 5
 
-Scenario Outline: Writing numbers 
+Scenario Outline: Writing numbers
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the number <Button>
 Then in the display screen should be show a <resultDisplay>
 
 Examples:
-|numberOnScreen|Button|resultDisplay| 
-|             0|   0  |            0| 
+|numberOnScreen|Button|resultDisplay|
+|             0|   0  |            0|
 |             7|   0  |           70|
 |             0|   1  |            1|
 |           123|   4  |         1234|
@@ -137,7 +137,7 @@ Scenario Outline: Performing two number operations
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the <operator>
 And the user writes the number: <secondNumber>
-And the user press the =                              
+And the user press the =
 Then in the display screen should be show a <resultDisplay>
 
 Examples:
@@ -168,7 +168,7 @@ Examples:
 Scenario Outline: Before clicking the equal button
 Given in the display screen the number <numberOnScreen> is shown
 When the user press the <operator>
-And the user writes the number: <secondNumber>                       
+And the user writes the number: <secondNumber>
 Then in the display screen should be show a <resultDisplay>
 
 Examples:
@@ -182,7 +182,7 @@ Scenario Outline: Performing two number operations with a result number with mor
 Given in the display screen the number 9999999999 is shown
 When the user press <operator>
 And the user writes the number: <secondNumber>
-And the user press = 
+And the user press =
 Then in the display screen should be show ERROR
 
 Examples:
@@ -207,7 +207,7 @@ Given in the display screen the number <firstNumber> is shown
 When the user presses <Button>
 And the user presses <Button2>
 And the user writes the number <secondNumber>
-When the user presses the =  
+When the user presses the =
 Then the display screen shows <resultDisplay>
 
 Examples:
@@ -267,7 +267,7 @@ Scenario Outline: Division with 0
 Given in the display screen the number <numberOnScreen> is shown
 And the user press /
 And the user writes the number: 0
-When the user press the =  
+When the user press the =
 Then the display screen should show ERROR
 
 Examples:
@@ -279,14 +279,14 @@ Examples:
 Scenario: Doing an operation without a second number
 Given in the display screen the number 23 is shown
 And the user press +
-And the user press the = 
+And the user press the =
 Then the display screen should show ERROR
 
 Scenario: Doing an operation without a first number
 Given the user opens the app
 And the user presses -
 And the user writes 23
-And the user presses the = 
+And the user presses the =
 Then the display screen should show -23
 
 Scenario: Button Disabled -> Do it on Figma
@@ -372,7 +372,7 @@ Examples:
 Scenario Outline: Using the Equals button without operation
 Given the user opens the app
 And the user writes the number <firstNumber>
-When the user presses the = 
+When the user presses the =
 Then the display screen should show <resultDisplay>
 
 Examples:

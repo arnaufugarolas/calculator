@@ -1,9 +1,5 @@
 function loadCalculator () {
     clearDisplay()
-
-    document.getElementById('+/-').classList.add('disabled')
-    document.getElementById('0').classList.add('disabled')
-
     addEvents()
 }
 
@@ -15,38 +11,38 @@ function addEvents () {
 
         if (button.classList.contains('number')) {
             button.addEventListener('click', function () {
-                if (!this.disabled) {
+                if (!this.classList.contains('disabled')) {
                     addNumberToDisplay(button.id)
                 }
             })
         } else if (button.classList.contains('operator')) {
             if (button.id === 'C') {
                 button.addEventListener('click', function () {
-                    if (!this.disabled) {
+                    if (!this.classList.contains('disabled')) {
                         clearDisplay()
                     }
                 })
             } else if (button.id === '+/-') {
                 button.addEventListener('click', function () {
-                    if (!this.disabled) {
+                    if (!this.classList.contains('disabled')) {
                         changeDisplaySign()
                     }
                 })
             } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
                 button.addEventListener('click', function () {
-                    if (!this.disabled) {
+                    if (!this.classList.contains('disabled')) {
                         addOperatorToDisplay(button.id)
                     }
                 })
             } else if (button.id === '=') {
                 button.addEventListener('click', function () {
-                    if (!this.disabled) {
+                    if (!this.classList.contains('disabled')) {
                         calculate()
                     }
                 })
             } else if (button.id === ',') {
                 button.addEventListener('click', function () {
-                    if (!this.disabled) {
+                    if (!this.classList.contains('disabled')) {
                         addPointToDisplay()
                     }
                 })
@@ -65,7 +61,7 @@ function addEvents () {
             key = 'C'
         }
 
-        if (document.getElementById(key).disabled) {
+        if (document.getElementById(key).classList.contains('disabled')) {
             return
         }
 
@@ -86,10 +82,10 @@ function addEvents () {
 }
 
 function clearDisplay () {
-    unHighlightKeys()
     document.getElementById('display').value = 0
 
     checkDisplay()
+    unHighlightKeys()
 }
 
 function addPointToDisplay () {
@@ -124,10 +120,13 @@ function addNumberToDisplay (number) {
 
 function addOperatorToDisplay (operator) {
     const display = document.getElementById('display')
-
-    display.value += operator
+    console.log(operator)
+    if (display.value === '0' && operator === '-') {
+        display.value = operator
+    } else {
+        display.value += operator
+    }
     highlightKey(operator)
-
     checkDisplay()
 }
 
@@ -179,10 +178,10 @@ function changeKeyState (keyId, state) {
     const key = document.getElementById(keyId)
     if (state && key.classList.contains('disabled')) {
         key.classList.remove('disabled')
-        key.disabled = false
+        // key.disabled = false
     } else if (!state && !key.classList.contains('disabled')) {
         key.classList.add('disabled')
-        key.disabled = true
+        // key.disabled = true
     }
 }
 
@@ -196,7 +195,6 @@ function changeOperatorsState (state) {
 
 function checkDisplay () {
     const display = document.getElementById('display')
-    console.log(display.value.match('[+]'))
     if (display.value === 'Error') {
         console.log('Error')
         changeOperatorsState(false)
@@ -213,6 +211,12 @@ function checkDisplay () {
         changeKeyState('C', true)
         changeKeyState('+/-', true)
         changeKeyState('0', true)
+    } else if (display.value === '-' && display.value.length === 1) {
+        console.log('minus')
+        changeOperatorsState(false)
+        changeKeyState('C', true)
+        changeKeyState('0', true)
+        changeKeyState('+/-', false)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)
