@@ -84,3 +84,10 @@ Scenario Outline: Pressing operators keys
     |   -  |
     |   /  |
     |   *  |
+
+  Scenario: Doing an operation with keyboard
+    And the user press the 2 key
+    And the user press the + key
+    And the user press the 3 key
+    When the user press the Enter key
+    Then in the display screen should be show a 5
