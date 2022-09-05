@@ -30,7 +30,7 @@ Then(/^all buttons should be enabled except (.*) and (.*)$/, async (disabledButt
         let haveToBeDisabled = false
         for (let j = 0; j < disabledButtons.length; j++) {
             if (await button.inputValue() === disabledButtons[j]) {
-                expect(await button.isDisabled()).toBe(true)
+                expect(await button.getAttribute('class')).toContain('disabled')
                 haveToBeDisabled = true
             }
         }

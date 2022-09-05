@@ -91,3 +91,29 @@ Scenario Outline: Pressing operators keys
     And the user press the 3 key
     When the user press the Enter key
     Then in the display screen should be show a 5
+
+Scenario Outline: Writing numbers
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <Button> button
+  Then in the display screen should be show a <resultDisplay>
+
+  Examples:
+    |numberOnScreen|Button|resultDisplay|
+    |             0|   0  |            0|
+    |             7|   0  |           70|
+    |             0|   1  |            1|
+    |           123|   4  |         1234|
+    |          1234|   8  |        12348|
+    |             0| ,    |           0,|
+    |          1234| ,    |        1234,|
+    |         1234,| 1    |       1234,1|
+    |        1234,1| ,    |       1234,1|
+    |             0| +/-  |            0|
+    |            0,| +/-  |           0,|
+    |           13,| +/-  |         -13,|
+    |          -13,| +/-  |          13,|
+    |          -0,5| +/-  |          0,5|
+    |           0,5| +/-  |         -0,5|
+    |             7| +/-  |           -7|
+    |          1234| +/-  |        -1234|
+    |         -1234| +/-  |         1234|
