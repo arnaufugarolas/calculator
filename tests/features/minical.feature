@@ -163,3 +163,16 @@ Scenario Outline: Performing two number operations
     |            10|    /    |          -2|           -5|
     |           -10|    /    |           2|           -5|
     |           -10|    /    |          -2|            5|
+
+Scenario Outline: Before clicking the equal button
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <operator> button
+  And the user writes the number: <secondNumber>
+  Then in the display screen should be show a <resultDisplay>
+
+  Examples:
+    |numberOnScreen|operator |secondNumber|resultDisplay|
+    |            24|    +    |           6|            6|
+    |          24,2|    -    |         6,4|          6,4|
+    |         13,14|    *    |       2,781|        2,781|
+    |            84|    /    |        -4,3|         -4,3|
