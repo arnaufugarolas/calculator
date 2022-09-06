@@ -93,30 +93,30 @@ Scenario: Doing an operation with keyboard
   Then in the display screen should be show a 5
 
 Scenario Outline: Writing numbers
-  Given in the display screen the number <numberOnScreen> is shown
-  When the user press the <Button> button
-  Then in the display screen should be show a <resultDisplay>
+Given in the display screen the number <numberOnScreen> is shown
+When the user press the <Button> button
+Then in the display screen should be show a <resultDisplay>
 
-  Examples:
-    |numberOnScreen|Button|resultDisplay|
-    |             0|   0  |            0|
-    |             7|   0  |           70|
-    |             0|   1  |            1|
-    |           123|   4  |         1234|
-    |          1234|   8  |        12348|
-    |             0| ,    |           0,|
-    |          1234| ,    |        1234,|
-    |         1234,| 1    |       1234,1|
-    |        1234,1| ,    |       1234,1|
-    |             0| +/-  |            0|
-    |            0,| +/-  |           0,|
-    |           13,| +/-  |         -13,|
-    |          -13,| +/-  |          13,|
-    |          -0,5| +/-  |          0,5|
-    |           0,5| +/-  |         -0,5|
-    |             7| +/-  |           -7|
-    |          1234| +/-  |        -1234|
-    |         -1234| +/-  |         1234|
+Examples:
+  |numberOnScreen|Button|resultDisplay|
+  |             0|   0  |            0|
+  |             7|   0  |           70|
+  |             0|   1  |            1|
+  |           123|   4  |         1234|
+  |          1234|   8  |        12348|
+  |             0| ,    |           0,|
+  |          1234| ,    |        1234,|
+  |         1234,| 1    |       1234,1|
+  |        1234,1| ,    |       1234,1|
+  |             0| +/-  |            0|
+  |            0,| +/-  |           0,|
+  |           13,| +/-  |         -13,|
+  |          -13,| +/-  |          13,|
+  |          -0,5| +/-  |          0,5|
+  |           0,5| +/-  |         -0,5|
+  |             7| +/-  |           -7|
+  |          1234| +/-  |        -1234|
+  |         -1234| +/-  |         1234|
 
 Scenario Outline: Writing more than 10 digits
   Given in the display screen the number <numberOnScreen> is shown
@@ -131,3 +131,35 @@ Scenario Outline: Writing more than 10 digits
     |     123456789|    ,   |   123456789,|
     |    123456789,|    5   |  123456789,5|
     |   123456789,5|   +/-  | -123456789,5|
+
+Scenario Outline: Performing two number operations
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <Operator> button
+  And the user writes the number: <secondNumber>
+  And the user press the = button
+  Then in the display screen should be show a <resultDisplay>
+
+  Examples:
+    |numberOnScreen|Operator |secondNumber|resultDisplay|
+    |            24|    +    |           6|           30|
+    |          24,2|    +    |         6,4|         30,6|
+    |         13,14|    +    |       2,781|       15,921|
+    |            10|    +    |          -5|            5|
+    |           -20|    +    |          10|          -10|
+    |            24|    -    |           6|           18|
+    |             6|    -    |          24|          -18|
+    |             6|    -    |         -24|           30|
+    |          24,2|    -    |         6,4|         17,8|
+    |         13,14|    -    |       2,781|       10,359|
+    |            10|    *    |           8|           80|
+    |           5,2|    *    |           8|         41,6|
+    |         36,25|    *    |       7,496|       271,73|
+    |            10|    *    |          -8|          -80|
+    |           -10|    *    |          -8|           80|
+    |           -10|    *    |           8|          -80|
+    |            10|    /    |           2|            5|
+    |            84|    /    |         4,3|  19,53488372|
+    |         23,58|    /    |       10,14|  2,325443787|
+    |            10|    /    |          -2|           -5|
+    |           -10|    /    |           2|           -5|
+    |           -10|    /    |          -2|            5|

@@ -85,6 +85,13 @@ Then(/^the (.*) button should be highlighted$/, async (key) => {
     expect(await button.getAttribute('class')).toContain('highlighted')
 })
 
+When(/^the user writes the number: (.*)$/, async (number) => {
+    const numberArray = number.split('')
+    for (const number of numberArray) {
+        await (await getButton(number)).click()
+    }
+})
+
 async function getButtons () {
     const locatorButtons = await page.locator('[data-testid]')
     const buttons = []
