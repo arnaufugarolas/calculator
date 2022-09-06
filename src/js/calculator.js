@@ -161,20 +161,18 @@ function unHighlightKeys () {
 }
 
 function calculate () {
-/*    const display = document.getElementById('display')
-    const expression = display.value
-
-    const result = splitExpression(expression) */
-
     const display = document.getElementById('display')
-    const expression = display.value
-    let result
-    if (expression.charAt(expression.length - 1).match('[0-9]')) {
-        // eslint-disable-next-line no-eval
-        result = eval(expression.replace(',', '.')).toString().replace('.', ',')
-    }
+    let expression = display.value
 
-    display.value = result || 'Error'
+    expression = expression.replaceAll(',', '.')
+    expression = expression.replaceAll('--', '+')
+
+    // eslint-disable-next-line no-eval
+    const result = eval(expression)
+    const integerNumber = result.toString().replace('.', ',').split(',')[0]
+    const numberOfDecimals = 10 - integerNumber.length
+
+    display.value = parseFloat(result.toFixed(numberOfDecimals)).toString().replace('.', ',')
 
     unHighlightKeys()
     checkDisplay()
@@ -199,6 +197,21 @@ function changeOperatorsState (state) {
 
 function checkDisplay () {
     const display = document.getElementById('display')
+    const splitExpression = splitExpressionNumbers(display.value)
+    const lastNumber = splitExpression[splitExpression.length - 1]
+
+    if (display.value === '0') {
+        changeOperatorsState(true)
+        changeKeyState('+/-', false)
+        changeKeyState('0', false)
+    } else if (lastNumber.match(',')) {
+        changeOperatorsState(true)
+        changeKeyState(',', false)
+    } else {
+        changeOperatorsState(true)
+        changeKeyState('0', true)
+    }
+    /*
     if (display.value === 'Error') {
         console.log('Error')
         changeOperatorsState(false)
@@ -216,39 +229,27 @@ function checkDisplay () {
         changeKeyState('+/-', true)
         changeKeyState('0', true)
     } else if (display.value === '-' && display.value.length === 1) {
-        console.log('minus')
         changeOperatorsState(false)
         changeKeyState('C', true)
         changeKeyState('0', true)
-        changeKeyState('+/-', false)
-    } else if (display.value.match(',')) {
-        const expression = splitExpression(display.value)
-
-        if (expression.length === 1) {
-            changeOperatorsState(true)
-            changeKeyState(',', false)
-        } else {
-            changeOperatorsState(true)
-        }
-
-        console.log(expression)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)
     }
+     */
 }
 
-function splitExpression (expression) {
-    const copy = expression
-    expression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
-    const numbers = copy.split(/[^0-9,]+/)
-    const operators = expression.split('#').filter(function (n) { return n })
+function splitExpressionNumbers (expression) {
+    const numbers = expression.split(/[^0-9,]+/)
     const result = []
 
     for (let i = 0; i < numbers.length; i++) {
-        result.push(numbers[i])
-        if (i < operators.length) result.push(operators[i])
+        if (numbers[i] !== '') {
+            result.push(numbers[i])
+        }
     }
-
+    if (result.length === 0) {
+        return ['']
+    }
     return result
 }

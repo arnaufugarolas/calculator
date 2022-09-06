@@ -87,20 +87,8 @@ Then(/^the (.*) button should be highlighted$/, async (key) => {
 
 When(/^the user writes the number: (.*)$/, async (number) => {
     const numberArray = number.split('')
-    let negative = false
-    if (numberArray[0] === '-') {
-        negative = true
-    }
-
-    for (let i = 0; i < numberArray.length; i++) {
-        if (numberArray[i] === '-') {
-            continue
-        }
-        await (await getButton(numberArray[i])).click()
-
-        if (negative && i === 1) {
-            await (await getButton('+/-')).click()
-        }
+    for (const number of numberArray) {
+        await (await getButton(number)).click()
     }
 })
 

@@ -93,30 +93,30 @@ Scenario: Doing an operation with keyboard
   Then in the display screen should be show a 5
 
 Scenario Outline: Writing numbers
-  Given in the display screen the number <numberOnScreen> is shown
-  When the user press the <Button> button
-  Then in the display screen should be show a <resultDisplay>
+Given in the display screen the number <numberOnScreen> is shown
+When the user press the <Button> button
+Then in the display screen should be show a <resultDisplay>
 
-  Examples:
-    |numberOnScreen|Button|resultDisplay|
-    |             0|   0  |            0|
-    |             7|   0  |           70|
-    |             0|   1  |            1|
-    |           123|   4  |         1234|
-    |          1234|   8  |        12348|
-    |             0| ,    |           0,|
-    |          1234| ,    |        1234,|
-    |         1234,| 1    |       1234,1|
-    |        1234,1| ,    |       1234,1|
-    |             0| +/-  |            0|
-    |            0,| +/-  |           0,|
-    |           13,| +/-  |         -13,|
-    |          -13,| +/-  |          13,|
-    |          -0,5| +/-  |          0,5|
-    |           0,5| +/-  |         -0,5|
-    |             7| +/-  |           -7|
-    |          1234| +/-  |        -1234|
-    |         -1234| +/-  |         1234|
+Examples:
+  |numberOnScreen|Button|resultDisplay|
+  |             0|   0  |            0|
+  |             7|   0  |           70|
+  |             0|   1  |            1|
+  |           123|   4  |         1234|
+  |          1234|   8  |        12348|
+  |             0| ,    |           0,|
+  |          1234| ,    |        1234,|
+  |         1234,| 1    |       1234,1|
+  |        1234,1| ,    |       1234,1|
+  |             0| +/-  |            0|
+  |            0,| +/-  |           0,|
+  |           13,| +/-  |         -13,|
+  |          -13,| +/-  |          13,|
+  |          -0,5| +/-  |          0,5|
+  |           0,5| +/-  |         -0,5|
+  |             7| +/-  |           -7|
+  |          1234| +/-  |        -1234|
+  |         -1234| +/-  |         1234|
 
 Scenario Outline: Writing more than 10 digits
   Given in the display screen the number <numberOnScreen> is shown
