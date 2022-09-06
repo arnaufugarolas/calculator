@@ -161,6 +161,11 @@ function unHighlightKeys () {
 }
 
 function calculate () {
+/*    const display = document.getElementById('display')
+    const expression = display.value
+
+    const result = splitExpression(expression) */
+
     const display = document.getElementById('display')
     const expression = display.value
     let result
@@ -217,29 +222,33 @@ function checkDisplay () {
         changeKeyState('0', true)
         changeKeyState('+/-', false)
     } else if (display.value.match(',')) {
-        let expression = display.value
-        const copy = expression
+        const expression = splitExpression(display.value)
 
-        expression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
-        const numbers = copy.split(/[^0-9,]+/)
-        const operators = expression.split('#').filter(function (n) { return n })
-        const result = []
-
-        for (i = 0; i < numbers.length; i++) {
-            result.push(numbers[i])
-            if (i < operators.length) result.push(operators[i])
-        }
-
-        if (result.length === 1) {
+        if (expression.length === 1) {
             changeOperatorsState(true)
             changeKeyState(',', false)
         } else {
             changeOperatorsState(true)
         }
 
-        console.log(result)
+        console.log(expression)
     } else {
         changeOperatorsState(true)
         changeKeyState('0', true)
     }
+}
+
+function splitExpression (expression) {
+    const copy = expression
+    expression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
+    const numbers = copy.split(/[^0-9,]+/)
+    const operators = expression.split('#').filter(function (n) { return n })
+    const result = []
+
+    for (let i = 0; i < numbers.length; i++) {
+        result.push(numbers[i])
+        if (i < operators.length) result.push(operators[i])
+    }
+
+    return result
 }
