@@ -85,6 +85,25 @@ Then(/^the (.*) button should be highlighted$/, async (key) => {
     expect(await button.getAttribute('class')).toContain('highlighted')
 })
 
+When(/^the user writes the number: (.*)$/, async (number) => {
+    const numberArray = number.split('')
+    let negative = false
+    if (numberArray[0] === '-') {
+        negative = true
+    }
+
+    for (let i = 0; i < numberArray.length; i++) {
+        if (numberArray[i] === '-') {
+            continue
+        }
+        await (await getButton(numberArray[i])).click()
+
+        if (negative && i === 1) {
+            await (await getButton('+/-')).click()
+        }
+    }
+})
+
 async function getButtons () {
     const locatorButtons = await page.locator('[data-testid]')
     const buttons = []
