@@ -50,29 +50,29 @@ Scenario Outline: Unhighlighting operators screen buttons
     |   =  |
     |   C  |
 
-  Scenario Outline: Pressing non-operators keys
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Key> key
-    Then in the display screen should be show a <resultDisplay>
+Scenario Outline: Pressing non-operators keys
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <Key> key
+  Then in the display screen should be show a <resultDisplay>
 
-    Examples:
-      |numberOnScreen|Key   | resultDisplay |
-      |             1|   0  |            10 |
-      |             0|   1  |             1 |
-      |             0|   2  |             2 |
-      |             0|   3  |             3 |
-      |             0|   4  |             4 |
-      |             0|   5  |             5 |
-      |             0|   6  |             6 |
-      |             0|   7  |             7 |
-      |             0|   8  |             8 |
-      |             0|   9  |             9 |
-      |             0|   ,  |            0, |
-      |             1|  ESC |             0 |
-      |            -1|  Left Ctrl |             1 |
-      |            -1| Right Ctrl |             1 |
-      |             1| Right Ctrl |            -1 |
-      |             1|  Left Ctrl |            -1 |
+  Examples:
+    |numberOnScreen|Key   | resultDisplay |
+    |             1|   0  |            10 |
+    |             0|   1  |             1 |
+    |             0|   2  |             2 |
+    |             0|   3  |             3 |
+    |             0|   4  |             4 |
+    |             0|   5  |             5 |
+    |             0|   6  |             6 |
+    |             0|   7  |             7 |
+    |             0|   8  |             8 |
+    |             0|   9  |             9 |
+    |             0|   ,  |            0, |
+    |             1|  ESC |             0 |
+    |            -1|  Left Ctrl |             1 |
+    |            -1| Right Ctrl |             1 |
+    |             1| Right Ctrl |            -1 |
+    |             1|  Left Ctrl |            -1 |
 
 Scenario Outline: Pressing operators keys
   When the user press the <Key> key
@@ -85,12 +85,12 @@ Scenario Outline: Pressing operators keys
     |   /  |
     |   *  |
 
-  Scenario: Doing an operation with keyboard
-    And the user press the 2 key
-    And the user press the + key
-    And the user press the 3 key
-    When the user press the Enter key
-    Then in the display screen should be show a 5
+Scenario: Doing an operation with keyboard
+  And the user press the 2 key
+  And the user press the + key
+  And the user press the 3 key
+  When the user press the Enter key
+  Then in the display screen should be show a 5
 
 Scenario Outline: Writing numbers
   Given in the display screen the number <numberOnScreen> is shown
@@ -117,3 +117,17 @@ Scenario Outline: Writing numbers
     |             7| +/-  |           -7|
     |          1234| +/-  |        -1234|
     |         -1234| +/-  |         1234|
+
+Scenario Outline: Writing more than 10 digits
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <Action> button
+  Then in the display screen should be show a <resultDisplay>
+
+  Examples:
+    |numberOnScreen| Action |resultDisplay|
+    |    1234567890|    7   |   1234567890|
+    |    1234567890|   +/-  |  -1234567890|
+    |    1234567890|    ,   |   1234567890|
+    |     123456789|    ,   |   123456789,|
+    |    123456789,|    5   |  123456789,5|
+    |   123456789,5|   +/-  | -123456789,5|
