@@ -106,7 +106,7 @@ function addPointToDisplay () {
 function addNumberToDisplay (number) {
     const display = document.getElementById('display')
 
-    if (display.value.replace(/[^0-9]/g, '').length === 10) {
+    if (display.value.replace(/[^0-9]/g, '').length >= 10) {
         return
     }
 
@@ -121,7 +121,7 @@ function addNumberToDisplay (number) {
 
 function addOperatorToDisplay (operator) {
     const display = document.getElementById('display')
-    console.log(operator)
+
     if (display.value === '0' && operator === '-') {
         display.value = operator
     } else {
