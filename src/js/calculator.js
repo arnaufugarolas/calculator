@@ -211,32 +211,6 @@ function checkDisplay () {
         changeOperatorsState(true)
         changeKeyState('0', true)
     }
-    /*
-    if (display.value === 'Error') {
-        console.log('Error')
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-    } else if (display.value.match('[+]$')) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-    } else if (display.value === '0') {
-        changeOperatorsState(true)
-        changeKeyState('+/-', false)
-        changeKeyState('0', false)
-    } else if (display.value.match('[0-9],$')) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-        changeKeyState('+/-', true)
-        changeKeyState('0', true)
-    } else if (display.value === '-' && display.value.length === 1) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-        changeKeyState('0', true)
-    } else {
-        changeOperatorsState(true)
-        changeKeyState('0', true)
-    }
-     */
 }
 
 function splitExpressionNumbers (expression) {
