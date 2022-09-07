@@ -218,7 +218,7 @@ Feature: Calculator
       |         12|   +  |   /   |           6|            2|
       |       1234|   -  |   +   |          31|         1265|
       |       9,26|   *  |   *   |       2,15 |       19,909|
-  @Single
+
   Scenario Outline: Doing a new operation
     Given in the display screen the number <firstNumber> is shown
     When the user press the <Button> button
