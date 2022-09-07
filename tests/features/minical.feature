@@ -218,3 +218,17 @@ Feature: Calculator
       |         12|   +  |   /   |           6|            2|
       |       1234|   -  |   +   |          31|         1265|
       |       9,26|   *  |   *   |       2,15 |       19,909|
+  @Single
+  Scenario Outline: Doing a new operation
+    Given in the display screen the number <firstNumber> is shown
+    When the user press the <Button> button
+    And the user writes the number: <secondNumber>
+    When the user press the = button
+    Then in the display screen should be show a <resultDisplay>
+    And the user writes the number: <thirdNumber>
+    Then in the display screen should be show a <thirdNumber>
+
+    Examples:
+      |firstNumber|Button|secondNumber|resultDisplay|thirdNumber|
+      |       12,2|   +  |           6|         18,2|         13|
+      | 1234567890|   +  |           1|   1234567891|        -24|
