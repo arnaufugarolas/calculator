@@ -2,7 +2,6 @@ const { Given, When, Then } = require('@cucumber/cucumber')
 const { expect } = require('@playwright/test')
 
 const url = 'http://localhost:8080/calculator/src/index.html'
-const display = await page.locator('[data-testid="display"]')
 
 Given(/^a user opens the app$/, async () => {
     await page.goto(url)
@@ -10,6 +9,8 @@ Given(/^a user opens the app$/, async () => {
 })
 
 Given(/^the display has the value: (.*)$/, async (numberOnScreen) => {
+    const display = await page.locator('[data-testid="display"]')
+
     await display.type(numberOnScreen)
     expect(await display.inputValue()).toBe(numberOnScreen)
 })
@@ -26,6 +27,7 @@ When(/^the user press the key: (.*)$/, async (key) => {
 
 When(/^the user writes the number: (.*)$/, async (number) => {
     const numberArray = number.split('')
+
     for (const number of numberArray) {
         await (await getButton(number)).click()
     }
@@ -36,7 +38,9 @@ When(/^the user press the button: (.*)$/, async (button) => {
 })
 
 Then(/^in the display screen should be show: (.*)$/, async (numberOnScreen) => {
-    expect(await display.inputValue()).toBe(numberOnScreen)
+    const display = await page.locator('[data-testid="display"]')
+
+    expect(display.inputValue()).toBe(numberOnScreen)
 })
 
 Then(/^all buttons should be enabled except: (.*)$/, async (disabledButtons) => {
