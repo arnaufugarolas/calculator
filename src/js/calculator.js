@@ -89,10 +89,6 @@ function resetDisplay () {
 }
 
 function addPoint () {
-    if (currentExpression.replace(/[^0-9]/g, '').length === 10) {
-        return
-    }
-
     addToDisplay(',')
     checkDisplay()
 }
@@ -100,9 +96,7 @@ function addPoint () {
 function addNumber (number) {
     const display = document.getElementById('display')
 
-    if (currentExpression.replace(/[^0-9]/g, '').length >= 10) {
-        return
-    } else if (currentExpression === '0') {
+    if (currentExpression === '0') {
         setDisplay(number)
     } else if (currentExpression === '-') {
         addToDisplay(number)
@@ -136,8 +130,8 @@ function addOperator (operator) {
         currentExpression += operator
     } else {
         addToDisplay(operator)
+        highlightKey(operator)
     }
-    highlightKey(operator)
     checkDisplay()
 }
 
@@ -177,12 +171,18 @@ function calculate () {
     expression = expression.replaceAll('--', '+')
 
     // eslint-disable-next-line no-eval
-    const result = eval(expression)
-    const integerNumber = result.toString().replace('.', ',').split(',')[0]
-    const numberOfDecimals = 10 - integerNumber.length
+    let result = eval(expression).toString()
 
-    setDisplay(parseFloat(result.toFixed(numberOfDecimals)).toString().replace('.', ','))
+    const nonDecimal = result.split('.')[0]
 
+    if (nonDecimal.length > 10) {
+        result = 'ERROR'
+    } else {
+        const maxDecimal = 10 - nonDecimal.length
+        result = parseFloat(parseFloat(result).toFixed(maxDecimal))
+    }
+
+    setDisplay(result.toString().replace('.', ','))
     unHighlightKeys()
     checkDisplay()
 }

@@ -176,3 +176,17 @@ Scenario Outline: Before clicking the equal button
     |          24,2|    -    |         6,4|          6,4|
     |         13,14|    *    |       2,781|        2,781|
     |            84|    /    |        -4,3|         -4,3|
+
+Scenario Outline: Performing two number operations with a result number with more than 10 nondecimal digits
+  Given in the display screen the number <numberOnScreen> is shown
+  When the user press the <operator> button
+  And the user writes the number: <secondNumber>
+  And the user press the = button
+  Then in the display screen should be show a ERROR
+
+  Examples:
+    |numberOnScreen|operator |secondNumber|
+    |    9999999999|    +    |           1|
+    |            -1|    -    |  9999999999|
+    |    9999999999|    *    |           2|
+    |    9999999999|    /    |         0,1|
