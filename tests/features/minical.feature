@@ -232,3 +232,21 @@ Feature: Calculator
       | firstNumber | button | secondNumber | resultDisplay | thirdNumber |
       | 12,2        | +      | 6            | 18,2          | 13          |
       | 1234567890  | +      | 1            | 1234567891    | -24         |
+
+  Scenario Outline: Using the previous result in a new operation
+    Given the display has the value: <firstNumber>
+    When the user press the button: <button>
+    And the user writes the number: <secondNumber>
+    And the user press the button: =
+    And in the display screen should be show: <resultDisplay>
+    And the user press the button: <button2>
+    And the user writes the number: <thirdNumber>
+    And the user press the button: =
+    Then in the display screen should be show: <resultDisplay2>
+
+    Examples:
+      | firstNumber | button | secondNumber | resultDisplay | button2 | thirdNumber | resultDisplay2 |
+      | 12,2        | +      | 6            | 18,2          | +       | 13          | 31,2           |
+      | 123         | -      | -24,8        | 147,8         | *       | 12          | 1773,6         |
+      | 1234567890  | /      | -2,5         | -493827156    | -       | 147         | -493827303     |
+
