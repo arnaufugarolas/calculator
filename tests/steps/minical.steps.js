@@ -40,7 +40,7 @@ When(/^the user press the button: (.*)$/, async (button) => {
 Then(/^in the display screen should be show: (.*)$/, async (numberOnScreen) => {
     const display = await page.locator('[data-testid="display"]')
 
-    expect(display.inputValue()).toBe(numberOnScreen)
+    expect(await display.inputValue()).toBe(numberOnScreen)
 })
 
 Then(/^all buttons should be enabled except: (.*)$/, async (disabledButtons) => {
