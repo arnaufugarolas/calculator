@@ -4,17 +4,17 @@ Feature: Calculator
     Given a user opens the app
 
   Scenario: Default display screen
-    Then in the display screen should be show a 0
-    And no button should be highlighted
-    And all buttons should be enabled except +/- and 0
+    Then in the display screen should be show: 0
+    And all buttons shouldn't be highlighted except: null
+    And all buttons should be enabled except: +/- 0
 
   Scenario Outline: Clicking non-operators screen buttons
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Button> button
-    Then in the display screen should be show a <resultDisplay>
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <button>
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      | numberOnScreen | Button | resultDisplay |
+      | numberOnScreen | button | resultDisplay |
       | 1              | 0      | 10            |
       | 0              | 1      | 1             |
       | 0              | 2      | 2             |
@@ -31,9 +31,9 @@ Feature: Calculator
       | 1              | +/-    | -1            |
 
   Scenario Outline: Clicking operators screen buttons
-    And the user press the 1 button
-    When the user press the <button> button
-    Then just the operator <button> button should be highlighted
+    And the user press the button: 1
+    When the user press the button: <button>
+    Then all buttons shouldn't be highlighted except: <button>
 
     Examples:
       | button |
@@ -43,8 +43,8 @@ Feature: Calculator
       | *      |
 
   Scenario Outline: Unhighlighting operators screen buttons
-    When the user press the <button> button
-    Then all the operators buttons should be unhighlighted
+    When the user press the button: <button>
+    Then all buttons shouldn't be highlighted except: null
 
     Examples:
       | button |
@@ -52,12 +52,12 @@ Feature: Calculator
       | C      |
 
   Scenario Outline: Pressing non-operators keys
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Key> key
-    Then in the display screen should be show a <resultDisplay>
+    Given the display has the value: <numberOnScreen>
+    When the user press the key: <key>
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      | numberOnScreen | Key        | resultDisplay |
+      | numberOnScreen | key        | resultDisplay |
       | 1              | 0          | 10            |
       | 0              | 1          | 1             |
       | 0              | 2          | 2             |
@@ -76,31 +76,31 @@ Feature: Calculator
       | 1              | Left Ctrl  | -1            |
 
   Scenario Outline: Pressing operators keys
-    And the user press the 1 key
-    When the user press the <Key> key
-    Then the <Key> button should be highlighted
+    And the user press the key: 1
+    When the user press the key: <key>
+    Then all buttons shouldn't be highlighted except: <key>
 
     Examples:
-      | Key |
+      | key |
       | +   |
       | -   |
       | /   |
       | *   |
 
   Scenario: Doing an operation with keyboard
-    And the user press the 2 key
-    And the user press the + key
-    And the user press the 3 key
-    When the user press the Enter key
-    Then in the display screen should be show a 5
+    And the user press the key: 2
+    And the user press the key: +
+    And the user press the key: 3
+    When the user press the key: Enter
+    Then in the display screen should be show: 5
 
   Scenario Outline: Writing numbers
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Button> button
-    Then in the display screen should be show a <resultDisplay>
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <button>
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      | numberOnScreen | Button | resultDisplay |
+      | numberOnScreen | button | resultDisplay |
       | 0              | 0      | 0             |
       | 7              | 0      | 70            |
       | 0              | 1      | 1             |
@@ -121,12 +121,12 @@ Feature: Calculator
       | -1234          | +/-    | 1234          |
 
   Scenario Outline: Writing more than 10 digits
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Action> button
-    Then in the display screen should be show a <resultDisplay>
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <button>
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      | numberOnScreen | Action | resultDisplay |
+      | numberOnScreen | button | resultDisplay |
       | 1234567890     | 7      | 1234567890    |
       | 1234567890     | +/-    | -1234567890   |
       | 1234567890     | ,      | 1234567890    |
@@ -135,14 +135,14 @@ Feature: Calculator
       | 123456789,5    | +/-    | -123456789,5  |
 
   Scenario Outline: Performing two number operations
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <Operator> button
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <operator>
     And the user writes the number: <secondNumber>
-    And the user press the = button
-    Then in the display screen should be show a <resultDisplay>
+    And the user press the button: =
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      | numberOnScreen | Operator | secondNumber | resultDisplay |
+      | numberOnScreen | operator | secondNumber | resultDisplay |
       | 24             | +        | 6            | 30            |
       | 24,2           | +        | 6,4          | 30,6          |
       | 13,14          | +        | 2,781        | 15,921        |
@@ -167,10 +167,10 @@ Feature: Calculator
       | -10            | /        | -2           | 5             |
 
   Scenario Outline: Before clicking the equal button
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <operator> button
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <operator>
     And the user writes the number: <secondNumber>
-    Then in the display screen should be show a <resultDisplay>
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
       | numberOnScreen | operator | secondNumber | resultDisplay |
@@ -179,12 +179,12 @@ Feature: Calculator
       | 13,14          | *        | 2,781        | 2,781         |
       | 84             | /        | -4,3         | -4,3          |
 
-  Scenario Outline: Performing two number operations with a result number with more than 10 nondecimal digits
-    Given in the display screen the number <numberOnScreen> is shown
-    When the user press the <operator> button
+  Scenario Outline: Performing two number operations with a result number with more than 10 non-decimal digits
+    Given the display has the value: <numberOnScreen>
+    When the user press the button: <operator>
     And the user writes the number: <secondNumber>
-    And the user press the = button
-    Then in the display screen should be show a ERROR
+    And the user press the button: =
+    Then in the display screen should be show: ERROR
 
     Examples:
       | numberOnScreen | operator | secondNumber |
@@ -194,41 +194,41 @@ Feature: Calculator
       | 9999999999     | /        | 0,1          |
 
   Scenario: Clicking the C button
-    When the user press the C button
-    Then in the display screen should be show a 0
-    And no button should be highlighted
-    And all buttons should be enabled except +/- and 0
+    When the user press the button: C
+    Then in the display screen should be show: 0
+    And all buttons shouldn't be highlighted except: null
+    And all buttons should be enabled except: +/- 0
 
   Scenario: Pressing the escape key
-    When the user press the Escape key
-    Then in the display screen should be show a 0
-    And no button should be highlighted
-    And all buttons should be enabled except +/- and 0
+    When the user press the key: Escape
+    Then in the display screen should be show: 0
+    And all buttons shouldn't be highlighted except: null
+    And all buttons should be enabled except: +/- 0
 
   Scenario Outline: Clicking two different operation buttons
-    Given in the display screen the number <firstNumber> is shown
-    When the user press the <Button> button
-    And the user press the <Button2> button
+    Given the display has the value: <firstNumber>
+    When   the user press the button: <button>
+    And the user press the button: <button2>
     And the user writes the number: <secondNumber>
-    When the user press the = button
-    Then in the display screen should be show a <resultDisplay>
+    When the user press the button: =
+    Then in the display screen should be show: <resultDisplay>
 
     Examples:
-      |firstNumber|Button|Button2|secondNumber|resultDisplay|
-      |         12|   +  |   /   |           6|            2|
-      |       1234|   -  |   +   |          31|         1265|
-      |       9,26|   *  |   *   |       2,15 |       19,909|
+      | firstNumber | button | button2 | secondNumber | resultDisplay |
+      | 12          | +      | /       | 6            | 2             |
+      | 1234        | -      | +       | 31           | 1265          |
+      | 9,26        | *      | *       | 2,15         | 19,909        |
 
   Scenario Outline: Doing a new operation
-    Given in the display screen the number <firstNumber> is shown
-    When the user press the <Button> button
+    Given the display has the value: <firstNumber>
+    When the user press the button: <button>
     And the user writes the number: <secondNumber>
-    When the user press the = button
-    Then in the display screen should be show a <resultDisplay>
+    When the user press the button: =
+    Then in the display screen should be show: <resultDisplay>
     And the user writes the number: <thirdNumber>
-    Then in the display screen should be show a <thirdNumber>
+    Then in the display screen should be show: <thirdNumber>
 
     Examples:
-      |firstNumber|Button|secondNumber|resultDisplay|thirdNumber|
-      |       12,2|   +  |           6|         18,2|         13|
-      | 1234567890|   +  |           1|   1234567891|        -24|
+      | firstNumber | button | secondNumber | resultDisplay | thirdNumber |
+      | 12,2        | +      | 6            | 18,2          | 13          |
+      | 1234567890  | +      | 1            | 1234567891    | -24         |
