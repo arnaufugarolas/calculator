@@ -31,6 +31,7 @@ Feature: Calculator
       | 1              | +/-    | -1            |
 
   Scenario Outline: Clicking operators screen buttons
+    And the user press the 1 button
     When the user press the <button> button
     Then just the operator <button> button should be highlighted
 
@@ -75,6 +76,7 @@ Feature: Calculator
       | 1              | Left Ctrl  | -1            |
 
   Scenario Outline: Pressing operators keys
+    And the user press the 1 key
     When the user press the <Key> key
     Then the <Key> button should be highlighted
 
