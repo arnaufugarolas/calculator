@@ -126,8 +126,13 @@ function addOperator (operator) {
     if (currentExpression === '0' && operator === '-') {
         setDisplay(operator)
     } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
-        display.value = operator
-        currentExpression += operator
+        if (operator === '-') {
+            display.value = operator
+            currentExpression += operator
+        } else {
+            replaceLastCharacterOnDisplay(operator)
+            highlightKey(operator)
+        }
     } else {
         addToDisplay(operator)
         highlightKey(operator)
@@ -245,4 +250,13 @@ function setDisplay (value) {
 function addToDisplay (value) {
     document.getElementById('display').value += value
     currentExpression += value
+}
+
+function replaceLastCharacterOnDisplay (value) {
+    const display = document.getElementById('display')
+
+    currentExpression = currentExpression.slice(0, -1)
+    display.value = display.value.slice(0, -1)
+
+    addToDisplay(value)
 }

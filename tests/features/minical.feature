@@ -204,3 +204,17 @@ Feature: Calculator
     Then in the display screen should be show a 0
     And no button should be highlighted
     And all buttons should be enabled except +/- and 0
+
+  Scenario Outline: Clicking two different operation buttons
+    Given in the display screen the number <firstNumber> is shown
+    When the user press the <Button> button
+    And the user press the <Button2> button
+    And the user writes the number: <secondNumber>
+    When the user press the = button
+    Then in the display screen should be show a <resultDisplay>
+
+    Examples:
+      |firstNumber|Button|Button2|secondNumber|resultDisplay|
+      |         12|   +  |   /   |           6|            2|
+      |       1234|   -  |   +   |          31|         1265|
+      |       9,26|   *  |   *   |       2,15 |       19,909|
