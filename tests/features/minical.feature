@@ -190,3 +190,9 @@ Feature: Calculator
       | -1             | -        | 9999999999   |
       | 9999999999     | *        | 2            |
       | 9999999999     | /        | 0,1          |
+
+  Scenario: Clicking the C button
+    When the user press the C button
+    Then in the display screen should be show a 0
+    And no button should be highlighted
+    And all buttons should be enabled except +/- and 0
