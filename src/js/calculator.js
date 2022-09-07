@@ -1,38 +1,38 @@
+let currentExpression = ''
+
 // eslint-disable-next-line no-unused-vars
 function loadCalculator () {
-    clearDisplay()
+    resetDisplay()
     addEvents()
 }
 
 function addEvents () {
     const buttons = document.getElementsByClassName('button')
 
-    for (let i = 0; i < buttons.length; i++) {
-        const button = buttons[i]
-
+    for (const button of buttons) {
         if (button.classList.contains('number')) {
             button.addEventListener('click', function () {
                 if (!this.classList.contains('disabled')) {
-                    addNumberToDisplay(button.id)
+                    addNumber(button.id)
                 }
             })
         } else if (button.classList.contains('operator')) {
             if (button.id === 'C') {
                 button.addEventListener('click', function () {
                     if (!this.classList.contains('disabled')) {
-                        clearDisplay()
+                        resetDisplay()
                     }
                 })
             } else if (button.id === '+/-') {
                 button.addEventListener('click', function () {
                     if (!this.classList.contains('disabled')) {
-                        changeDisplaySign()
+                        changeSign()
                     }
                 })
             } else if (button.id === '+' || button.id === '-' || button.id === '*' || button.id === '/') {
                 button.addEventListener('click', function () {
                     if (!this.classList.contains('disabled')) {
-                        addOperatorToDisplay(button.id)
+                        addOperator(button.id)
                     }
                 })
             } else if (button.id === '=') {
@@ -44,7 +44,7 @@ function addEvents () {
             } else if (button.id === ',') {
                 button.addEventListener('click', function () {
                     if (!this.classList.contains('disabled')) {
-                        addPointToDisplay()
+                        addPoint()
                     }
                 })
             }
@@ -67,71 +67,81 @@ function addEvents () {
         }
 
         if (key === ',') {
-            addPointToDisplay()
+            addPoint()
         } else if (key >= 0 && key <= 9) {
-            addNumberToDisplay(key)
+            addNumber(key)
         } else if (key === 'C') {
-            clearDisplay()
+            resetDisplay()
         } else if (key === '+/-') {
-            changeDisplaySign()
+            changeSign()
         } else if (key === '+' || key === '-' || key === '*' || key === '/') {
-            addOperatorToDisplay(key)
+            addOperator(key)
         } else if (key === '=') {
             calculate()
         }
     })
 }
 
-function clearDisplay () {
-    document.getElementById('display').value = 0
-
+function resetDisplay () {
+    setDisplay('0')
     checkDisplay()
     unHighlightKeys()
 }
 
-function addPointToDisplay () {
-    const display = document.getElementById('display')
-
-    if (display.value === 'Error') {
-        return
-    } else if (display.value.replace(/[^0-9]/g, '').length === 10) {
+function addPoint () {
+    if (currentExpression.replace(/[^0-9]/g, '').length === 10) {
         return
     }
 
-    document.getElementById('display').value += ','
-
+    addToDisplay(',')
     checkDisplay()
 }
 
-function addNumberToDisplay (number) {
+function addNumber (number) {
     const display = document.getElementById('display')
 
-    if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+    if (currentExpression.replace(/[^0-9]/g, '').length >= 10) {
         return
-    }
-
-    if ((display.value[0] === '0' && display.value.length === 1) || display.value === 'Error') {
-        display.value = number
+    } else if (currentExpression === '0') {
+        setDisplay(number)
+    } else if (currentExpression === '-') {
+        addToDisplay(number)
+    } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
+        const length = currentExpression.length - 2
+        if (length >= 0) {
+            if (currentExpression[length].match(/[+\-*/]/)) {
+                addToDisplay(number)
+            } else {
+                display.value = number
+                currentExpression += number
+            }
+        } else {
+            display.value = number
+            currentExpression += number
+        }
     } else {
-        display.value += number
+        addToDisplay(number)
     }
 
     checkDisplay()
 }
 
-function addOperatorToDisplay (operator) {
+function addOperator (operator) {
     const display = document.getElementById('display')
 
-    if (display.value === '0' && operator === '-') {
+    if (currentExpression === '0' && operator === '-') {
+        setDisplay(operator)
+    } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
         display.value = operator
+        currentExpression += operator
     } else {
-        display.value += operator
+        addToDisplay(operator)
     }
     highlightKey(operator)
     checkDisplay()
 }
 
-function changeDisplaySign () {
+function changeSign () {
     const display = document.getElementById('display')
     let value = display.value
 
@@ -161,8 +171,7 @@ function unHighlightKeys () {
 }
 
 function calculate () {
-    const display = document.getElementById('display')
-    let expression = display.value
+    let expression = currentExpression
 
     expression = expression.replaceAll(',', '.')
     expression = expression.replaceAll('--', '+')
@@ -172,7 +181,7 @@ function calculate () {
     const integerNumber = result.toString().replace('.', ',').split(',')[0]
     const numberOfDecimals = 10 - integerNumber.length
 
-    display.value = parseFloat(result.toFixed(numberOfDecimals)).toString().replace('.', ',')
+    setDisplay(parseFloat(result.toFixed(numberOfDecimals)).toString().replace('.', ','))
 
     unHighlightKeys()
     checkDisplay()
@@ -211,32 +220,6 @@ function checkDisplay () {
         changeOperatorsState(true)
         changeKeyState('0', true)
     }
-    /*
-    if (display.value === 'Error') {
-        console.log('Error')
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-    } else if (display.value.match('[+]$')) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-    } else if (display.value === '0') {
-        changeOperatorsState(true)
-        changeKeyState('+/-', false)
-        changeKeyState('0', false)
-    } else if (display.value.match('[0-9],$')) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-        changeKeyState('+/-', true)
-        changeKeyState('0', true)
-    } else if (display.value === '-' && display.value.length === 1) {
-        changeOperatorsState(false)
-        changeKeyState('C', true)
-        changeKeyState('0', true)
-    } else {
-        changeOperatorsState(true)
-        changeKeyState('0', true)
-    }
-     */
 }
 
 function splitExpressionNumbers (expression) {
@@ -252,4 +235,14 @@ function splitExpressionNumbers (expression) {
         return ['']
     }
     return result
+}
+
+function setDisplay (value) {
+    document.getElementById('display').value = value
+    currentExpression = value
+}
+
+function addToDisplay (value) {
+    document.getElementById('display').value += value
+    currentExpression += value
 }
