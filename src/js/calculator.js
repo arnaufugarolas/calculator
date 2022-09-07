@@ -93,7 +93,7 @@ function addPoint () {
         return
     }
 
-    addNumber(',')
+    addToDisplay(',')
     checkDisplay()
 }
 
