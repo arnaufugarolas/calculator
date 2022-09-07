@@ -198,3 +198,9 @@ Feature: Calculator
     Then in the display screen should be show a 0
     And no button should be highlighted
     And all buttons should be enabled except +/- and 0
+
+  Scenario: Pressing the escape key
+    When the user press the Escape key
+    Then in the display screen should be show a 0
+    And no button should be highlighted
+    And all buttons should be enabled except +/- and 0
