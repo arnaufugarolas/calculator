@@ -186,8 +186,9 @@ function calculate () {
         const maxDecimal = 10 - nonDecimal.length
         result = parseFloat(parseFloat(result).toFixed(maxDecimal))
     }
+    document.getElementById('display').value = result.toString().replace('.', ',')
+    currentExpression = '0'
 
-    setDisplay(result.toString().replace('.', ','))
     unHighlightKeys()
     checkDisplay()
 }
