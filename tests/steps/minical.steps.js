@@ -27,9 +27,16 @@ When(/^the user press the key: (.*)$/, async (key) => {
 
 When(/^the user writes the number: (.*)$/, async (number) => {
     const numberArray = number.split('')
+    const negative = numberArray[0] === '-'
 
     for (const number of numberArray) {
+        if (number === '-') {
+            continue
+        }
         await (await getButton(number)).click()
+    }
+    if (negative) {
+        await (await getButton('+/-')).click()
     }
 })
 
