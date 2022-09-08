@@ -89,6 +89,10 @@ function resetDisplay () {
 }
 
 function addPoint () {
+    const display = document.getElementById('display')
+    if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+        return
+    }
     addToDisplay(',')
     checkDisplay()
 }
@@ -114,6 +118,9 @@ function addNumber (number) {
             currentExpression += number
         }
     } else {
+        if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+            return
+        }
         addToDisplay(number)
     }
 
