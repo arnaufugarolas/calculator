@@ -102,6 +102,8 @@ function addNumber (number) {
 
     if (currentExpression === '0') {
         setDisplay(number)
+    } else if (currentExpression.match('=')) {
+        setDisplay(number)
     } else if (currentExpression === '-') {
         addToDisplay(number)
     } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
@@ -131,7 +133,6 @@ function addOperator (operator) {
     const display = document.getElementById('display')
 
     if (currentExpression.match('=')) {
-        console.log('here')
         currentExpression = currentExpression.split('=')[1]
     }
 
