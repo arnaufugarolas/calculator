@@ -1,35 +1,62 @@
-const { Given, When, Then, DataTable } = require('@cucumber/cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 const { expect } = require('@playwright/test')
 
 const url = 'http://localhost:8080/calculator/src/index.html'
 
 Given(/^a user opens the app$/, async () => {
     await page.goto(url)
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('load')
 })
 
-Then(/^in the display screen should be show a (.*)$/, async (value) => {
-    const display = await page.locator('[data-testid="display"]').inputValue()
-    expect(display).toBe(value)
+Given(/^the display has the value: (.*)$/, async (numberOnScreen) => {
+    const display = await page.locator('[data-testid="display"]')
+
+    await display.type(numberOnScreen)
+    expect(await display.inputValue()).toBe(numberOnScreen)
 })
 
-Then(/^no button should be highlighted$/, async () => {
-    const buttons = await getButtons()
-
-    for (const button of buttons) {
-        expect(await button.getAttribute('class')).not.toContain('highlighted')
+When(/^the user press the key: (.*)$/, async (key) => {
+    if (key === 'ESC') {
+        await page.keyboard.press('Escape')
+    } else if (key === 'Left Ctrl' || key === 'Right Ctrl') {
+        await page.keyboard.down('Control')
+    } else {
+        await page.keyboard.press(key)
     }
 })
 
-Then(/^all buttons should be enabled except (.*) and (.*)$/, async (disabledButton01, disabledButton02) => {
-    const disabledButtons = [disabledButton01, disabledButton02]
+When(/^the user writes the number: (.*)$/, async (number) => {
+    const numberArray = number.split('')
+    const negative = numberArray[0] === '-'
 
+    for (const number of numberArray) {
+        if (number === '-') {
+            continue
+        }
+        await (await getButton(number)).click()
+    }
+    if (negative) {
+        await (await getButton('+/-')).click()
+    }
+})
+
+When(/^the user press the button: (.*)$/, async (button) => {
+    await (await getButton(button)).click()
+})
+
+Then(/^in the display screen should be show: (.*)$/, async (numberOnScreen) => {
+    const display = await page.locator('[data-testid="display"]')
+
+    expect(await display.inputValue()).toBe(numberOnScreen)
+})
+
+Then(/^all buttons should be enabled except: (.*)$/, async (disabledButtons) => {
     const buttons = await getButtons()
 
     for (const button of buttons) {
         let haveToBeDisabled = false
-        for (let j = 0; j < disabledButtons.length; j++) {
-            if (await button.inputValue() === disabledButtons[j]) {
+        for (const disabledButton of disabledButtons.split(' ')) {
+            if (await button.inputValue() === disabledButton) {
                 expect(await button.getAttribute('class')).toContain('disabled')
                 haveToBeDisabled = true
             }
@@ -40,55 +67,17 @@ Then(/^all buttons should be enabled except (.*) and (.*)$/, async (disabledButt
     }
 })
 
-Given(/^in the display screen the number (.*) is shown$/, async (numberOnScreen) => {
-    const display = await page.locator('[data-testid="display"]')
-    await display.type(numberOnScreen)
-    expect(await display.inputValue()).toBe(numberOnScreen)
-})
-
-When(/^the user press the (.*) button$/, async (key) => {
-    await (await getButton(key)).click()
-})
-
-Then(/^just the operator (.*) button should be highlighted$/, async (key) => {
+Then(/^all buttons shouldn't be highlighted except: (.*)$/, async (highlightedButtons) => {
     const buttons = await getButtons()
 
     for (const button of buttons) {
-        if (await button.inputValue() === key) {
-            expect(await button.getAttribute('class')).toContain('highlighted')
-        } else {
-            expect(await button.getAttribute('class')).not.toContain('highlighted')
+        for (const highlightedButton of highlightedButtons.split(' ')) {
+            if (await button.inputValue() === highlightedButton) {
+                expect(await button.getAttribute('class')).toContain('highlighted')
+            } else {
+                expect(await button.getAttribute('class')).not.toContain('highlighted')
+            }
         }
-    }
-})
-
-Then(/^all the operators buttons should be unhighlighted$/, async () => {
-    const operators = await getOperators()
-
-    for (const operator of operators) {
-        expect(await operator.getAttribute('class')).not.toContain('highlighted')
-    }
-})
-
-When(/^the user press the (.*) key$/, async (key) => {
-    if (key === 'ESC') {
-        await page.keyboard.press('Escape')
-    } else if (key === 'Left Ctrl' || key === 'Right Ctrl') {
-        await page.keyboard.down('Control')
-    } else {
-        await page.keyboard.press(key)
-    }
-})
-
-Then(/^the (.*) button should be highlighted$/, async (key) => {
-    const button = await getButton(key)
-    expect(await button.getAttribute('class')).toContain('highlighted')
-})
-
-When(/^the user writes the number: (.*)$/, async (number) => {
-    const numberArray = number.split('')
-    for (const number of numberArray) {
-        await (await getButton(number)).click()
     }
 })
 
@@ -103,19 +92,6 @@ async function getButtons () {
     }
 
     return buttons
-}
-
-async function getOperators () {
-    const locatorButtons = await page.locator('[data-testid]')
-    const operators = []
-
-    for (let i = 0; i < await locatorButtons.count(); i++) {
-        if ((await locatorButtons.nth(i).getAttribute('data-testid')).includes('operator')) {
-            operators.push(await locatorButtons.nth(i))
-        }
-    }
-
-    return operators
 }
 
 async function getButton (key) {

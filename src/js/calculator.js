@@ -89,6 +89,10 @@ function resetDisplay () {
 }
 
 function addPoint () {
+    const display = document.getElementById('display')
+    if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+        return
+    }
     addToDisplay(',')
     checkDisplay()
 }
@@ -97,6 +101,8 @@ function addNumber (number) {
     const display = document.getElementById('display')
 
     if (currentExpression === '0') {
+        setDisplay(number)
+    } else if (currentExpression.match('=')) {
         setDisplay(number)
     } else if (currentExpression === '-') {
         addToDisplay(number)
@@ -114,6 +120,9 @@ function addNumber (number) {
             currentExpression += number
         }
     } else {
+        if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+            return
+        }
         addToDisplay(number)
     }
 
@@ -122,6 +131,10 @@ function addNumber (number) {
 
 function addOperator (operator) {
     const display = document.getElementById('display')
+
+    if (currentExpression.match('=')) {
+        currentExpression = currentExpression.split('=')[1]
+    }
 
     if (currentExpression === '0' && operator === '-') {
         setDisplay(operator)
@@ -142,16 +155,21 @@ function addOperator (operator) {
 
 function changeSign () {
     const display = document.getElementById('display')
-    let value = display.value
+    const splitedExpression = splitExpression(currentExpression)
+    let value = splitedExpression[splitedExpression.length - 1].replace(/,/g, '.')
 
-    if (value.match(',$')) {
-        value = -value.replace(',', '')
-        value = value.toString() + ','
+    if (value.match(/\.$/)) {
+        console.log('here')
+        value = -value.replace('.', '')
+        value = value.toString() + '.'
     } else {
-        value = -value.replace(',', '.')
-        value = value.toString().replace('.', ',')
+        value = -value
+        value = value.toString()
     }
-    display.value = value
+
+    splitedExpression[splitedExpression.length - 1] = value
+    display.value = value.replace(/\./g, ',')
+    currentExpression = splitedExpression.toString().replaceAll(',', '')
 }
 
 function highlightKey (button) {
@@ -186,8 +204,11 @@ function calculate () {
         const maxDecimal = 10 - nonDecimal.length
         result = parseFloat(parseFloat(result).toFixed(maxDecimal))
     }
-    document.getElementById('display').value = result.toString().replace('.', ',')
-    currentExpression = '0'
+
+    result = result.toString().replace('.', ',')
+
+    document.getElementById('display').value = result
+    currentExpression += '=' + result
 
     unHighlightKeys()
     checkDisplay()
@@ -212,14 +233,14 @@ function changeOperatorsState (state) {
 
 function checkDisplay () {
     const display = document.getElementById('display')
-    const splitExpression = splitExpressionNumbers(display.value)
-    const lastNumber = splitExpression[splitExpression.length - 1]
+    const expression = splitExpression(display.value)
+    const lastNumber = expression[expression.length - 1]
 
     if (display.value === '0') {
         changeOperatorsState(true)
         changeKeyState('+/-', false)
         changeKeyState('0', false)
-    } else if (lastNumber.match(',')) {
+    } else if (lastNumber.toString().match(',')) {
         changeOperatorsState(true)
         changeKeyState(',', false)
     } else {
@@ -229,17 +250,15 @@ function checkDisplay () {
 }
 
 function splitExpressionNumbers (expression) {
-    const numbers = expression.split(/[^0-9,]+/)
+    const expressionArray = splitExpression(expression)
     const result = []
 
-    for (let i = 0; i < numbers.length; i++) {
-        if (numbers[i] !== '') {
-            result.push(numbers[i])
+    for (let i = 0; i < expressionArray.length; i++) {
+        if (expressionArray[i].toString().match(/[0-9,]/)) {
+            result.push(expressionArray[i])
         }
     }
-    if (result.length === 0) {
-        return ['']
-    }
+
     return result
 }
 
@@ -260,4 +279,31 @@ function replaceLastCharacterOnDisplay (value) {
     display.value = display.value.slice(0, -1)
 
     addToDisplay(value)
+}
+
+function splitExpression (expression) {
+    const copy = expression
+    const baseExpression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
+    const numbers = copy.split(/[^0-9,]+/)
+    const operators = baseExpression.split('#').filter(function (n) { return n })
+    const result = []
+
+    for (let i = 0; i < numbers.length; i++) {
+        if (numbers[i] === '') {
+            i++
+            result.push((operators[i - 1] + numbers[i]))
+        } else { result.push(numbers[i]) }
+
+        if (i < operators.length) {
+            if (operators[i].match(RegExp('[+\\-*/=]-'))) {
+                const operatorsArray = operators[i].split('')
+                i++
+
+                result.push(operatorsArray[0])
+                result.push(operatorsArray[1] + numbers[i])
+            } else { result.push(operators[i]) }
+        }
+    }
+
+    return result
 }
