@@ -201,7 +201,7 @@ Feature: Calculator
             |          12,2 |           + |            6 |            + |          13 |          31,2 |
             |           123 |           - |        -24,8 |            * |          12 |        1773,6 |
             |    1234567890 |           / |         -2,5 |            - |         147 |    -493827303 |
-    @Single
+
     Scenario Outline: Using the previous result in a new operation easier
         Given the display shows the following value: "<displayNumber>"
         And the user presses the "<firstButton>" button
@@ -337,6 +337,7 @@ Feature: Calculator
         And the "/" button should be enabled
 
         Examples:
+            |button|
             |   =  |
 
     Scenario Outline: Disabling buttons
