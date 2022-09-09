@@ -189,23 +189,27 @@ function unHighlightKeys () {
 
 function calculate () {
     let expression = currentExpression
-
+    let result
     expression = expression.replaceAll(',', '.')
     expression = expression.replaceAll('--', '+')
 
-    // eslint-disable-next-line no-eval
-    let result = eval(expression).toString()
-
-    const nonDecimal = result.split('.')[0]
-
-    if (nonDecimal.length > 10) {
+    if (expression.match(/\/0/)) {
         result = 'ERROR'
-    } else if (expression.match(/\/0/)) {
+    } else if (expression.match(/[+\-*/]$/)) {
         result = 'ERROR'
     } else {
-        const maxDecimal = 10 - nonDecimal.length
-        result = parseFloat(parseFloat(result).toFixed(maxDecimal))
-        result = result.toString().replace('.', ',')
+        // eslint-disable-next-line no-eval
+        result = eval(expression).toString()
+
+        const nonDecimal = result.split('.')[0]
+
+        if (nonDecimal.length > 10) {
+            result = 'ERROR'
+        } else {
+            const maxDecimal = 10 - nonDecimal.length
+            result = parseFloat(parseFloat(result).toFixed(maxDecimal))
+            result = result.toString().replace('.', ',')
+        }
     }
 
     document.getElementById('display').value = result
