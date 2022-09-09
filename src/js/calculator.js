@@ -153,13 +153,12 @@ function addOperator (operator) {
 }
 
 function changeSign () {
-    console.log(currentExpression)
-
     const display = document.getElementById('display')
     const splitedExpression = splitExpression(currentExpression)
     let value = splitedExpression[splitedExpression.length - 1].replace(/,/g, '.')
-    console.log(value)
-    if (value.match(/[.].$/)) {
+
+    if (value.match(/\.$/)) {
+        console.log('here')
         value = -value.replace('.', '')
         value = value.toString() + '.'
     } else {
@@ -170,8 +169,6 @@ function changeSign () {
     splitedExpression[splitedExpression.length - 1] = value
     display.value = value.replace(/\./g, ',')
     currentExpression = splitedExpression.toString().replaceAll(',', '')
-
-    console.log(currentExpression)
 }
 
 function highlightKey (button) {
