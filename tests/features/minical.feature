@@ -262,3 +262,9 @@ Feature: Calculator
       |             1|
       |            -1|
       |             0|
+  @Single
+  Scenario: Doing an operation without a second number
+    Given the display has the value: 23
+    And the user press the button: +
+    And the user press the button: =
+    Then in the display screen should be show: ERROR
