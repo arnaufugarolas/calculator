@@ -100,9 +100,7 @@ function addPoint () {
 function addNumber (number) {
     const display = document.getElementById('display')
 
-    if (currentExpression === '0') {
-        setDisplay(number)
-    } else if (currentExpression.match('=')) {
+    if (currentExpression === '0' || currentExpression.match('=')) {
         setDisplay(number)
     } else if (currentExpression === '-') {
         addToDisplay(number)
@@ -194,9 +192,7 @@ function calculate () {
     expression = expression.replaceAll(',', '.')
     expression = expression.replaceAll('--', '+')
 
-    if (expression.match(/\/0/)) {
-        result = 'ERROR'
-    } else if (expression.match(/[+\-*/]$/)) {
+    if (expression.match(/\/0/) || expression.match(/[+\-*/]$/)) {
         result = 'ERROR'
     } else {
         // eslint-disable-next-line no-eval
@@ -209,12 +205,15 @@ function calculate () {
         } else {
             const maxDecimal = 10 - nonDecimal.length
             result = parseFloat(parseFloat(result).toFixed(maxDecimal))
-            result = result.toString().replace('.', ',')
+            result = result.toString().replace(/\./g, ',')
         }
     }
-
-    document.getElementById('display').value = result
-    currentExpression += '=' + result
+    if (result === 'ERROR') {
+        setDisplay(result)
+    } else {
+        document.getElementById('display').value = result
+        currentExpression += '=' + result
+    }
 
     unHighlightKeys()
     checkDisplay()
@@ -224,8 +223,10 @@ function changeKeyState (keyId, state) {
     const key = document.getElementById(keyId)
     if (state && key.classList.contains('disabled')) {
         key.classList.remove('disabled')
+        key.disabled = false
     } else if (!state && !key.classList.contains('disabled')) {
         key.classList.add('disabled')
+        key.disabled = true
     }
 }
 
@@ -246,9 +247,8 @@ function changeNumbersState (state) {
 }
 
 function checkDisplay () {
-    console.log(currentExpression)
     const display = document.getElementById('display')
-    const expression = splitExpression(display.value)
+    const expression = splitExpression(currentExpression)
     const lastNumber = expression[expression.length - 1]
 
     if (display.value === '0') {
@@ -256,18 +256,29 @@ function checkDisplay () {
         changeOperatorsState(true)
         changeKeyState('+/-', false)
         changeKeyState('0', false)
+    } else if (currentExpression.match(/=/)) {
+        changeNumbersState(true)
+        changeOperatorsState(true)
+        changeKeyState(',', false)
+    } else if (lastNumber.match(/[+\-*/]/)) {
+        changeNumbersState(true)
+        changeOperatorsState(true)
+        changeKeyState('+/-', false)
+    } else if (lastNumber.replace(/[^0-9]/g, '').length >= 10) {
+        changeNumbersState(false)
+        changeOperatorsState(true)
+        changeKeyState(',', false)
     } else if (lastNumber.toString().match(',')) {
         changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState(',', false)
-    } else if (display.value.replace(/[^0-9]/g, '').length >= 10) {
-        changeNumbersState(true)
-        changeOperatorsState(true)
-        changeKeyState(',', true)
+    } else if (currentExpression === 'ERROR') {
+        changeNumbersState(false)
+        changeOperatorsState(false)
+        changeKeyState('C', true)
     } else {
         changeNumbersState(true)
         changeOperatorsState(true)
-        changeKeyState('0', true)
     }
 }
 
@@ -282,10 +293,7 @@ function addToDisplay (value) {
 }
 
 function replaceLastCharacterOnDisplay (value) {
-    const display = document.getElementById('display')
-
     currentExpression = currentExpression.slice(0, -1)
-
     currentExpression += value
 }
 
