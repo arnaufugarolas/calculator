@@ -26,7 +26,7 @@ body {
     text-align: right;
 }
 
-input[type=button] {
+.button {
     font-family: 'Orbitron', sans-serif;
     background-color: #58a4b0;
     color: white;
@@ -38,10 +38,21 @@ input[type=button] {
     opacity: 70%;
 }
 
+.button:hover {
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.button:active {
+    opacity: 100%;
+    border-style: inset;
+}
+
 .highlighted {
     opacity: 100% !important;
 }
 
 .disabled {
     opacity: 30% !important;
+    cursor: default !important;
 }
