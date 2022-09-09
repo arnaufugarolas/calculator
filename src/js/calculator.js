@@ -132,10 +132,15 @@ function addNumber (number) {
 function addOperator (operator) {
     const display = document.getElementById('display')
 
+    const expression = splitExpression(currentExpression)
+
+    if (expression.length === 3) {
+        calculate()
+    }
+
     if (currentExpression.match('=')) {
         currentExpression = currentExpression.split('=')[1]
     }
-
     if (currentExpression === '0' && operator === '-') {
         setDisplay(operator)
     } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
@@ -147,29 +152,25 @@ function addOperator (operator) {
             highlightKey(operator)
         }
     } else {
-        addToDisplay(operator)
+        currentExpression += operator
         highlightKey(operator)
     }
     checkDisplay()
 }
 
 function changeSign () {
-    const display = document.getElementById('display')
     const splitedExpression = splitExpression(currentExpression)
-    let value = splitedExpression[splitedExpression.length - 1].replace(/,/g, '.')
+    let numberToChange = splitedExpression[splitedExpression.length - 1].toString().replace(/,/g, '.')
 
-    if (value.match(/\.$/)) {
-        console.log('here')
-        value = -value.replace('.', '')
-        value = value.toString() + '.'
+    if (numberToChange.match(/\.$/)) {
+        numberToChange = (-numberToChange.toString() + ',')
     } else {
-        value = -value
-        value = value.toString()
+        numberToChange = (-numberToChange).toString().replace(/\./g, ',')
     }
+    splitedExpression[splitedExpression.length - 1] = numberToChange
 
-    splitedExpression[splitedExpression.length - 1] = value
-    display.value = value.replace(/\./g, ',')
-    currentExpression = splitedExpression.toString().replaceAll(',', '')
+    document.getElementById('display').value = numberToChange
+    currentExpression = splitedExpression.join('')
 }
 
 function highlightKey (button) {
@@ -236,35 +237,38 @@ function changeOperatorsState (state) {
     }
 }
 
+function changeNumbersState (state) {
+    const numbers = document.getElementsByClassName('number')
+
+    for (let i = 0; i < numbers.length; i++) {
+        changeKeyState(numbers[i].id, state)
+    }
+}
+
 function checkDisplay () {
+    console.log(currentExpression)
     const display = document.getElementById('display')
     const expression = splitExpression(display.value)
     const lastNumber = expression[expression.length - 1]
 
     if (display.value === '0') {
+        changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState('+/-', false)
         changeKeyState('0', false)
     } else if (lastNumber.toString().match(',')) {
+        changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState(',', false)
+    } else if (display.value.replace(/[^0-9]/g, '').length >= 10) {
+        changeNumbersState(true)
+        changeOperatorsState(true)
+        changeKeyState(',', true)
     } else {
+        changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState('0', true)
     }
-}
-
-function splitExpressionNumbers (expression) {
-    const expressionArray = splitExpression(expression)
-    const result = []
-
-    for (let i = 0; i < expressionArray.length; i++) {
-        if (expressionArray[i].toString().match(/[0-9,]/)) {
-            result.push(expressionArray[i])
-        }
-    }
-
-    return result
 }
 
 function setDisplay (value) {
@@ -281,9 +285,8 @@ function replaceLastCharacterOnDisplay (value) {
     const display = document.getElementById('display')
 
     currentExpression = currentExpression.slice(0, -1)
-    display.value = display.value.slice(0, -1)
 
-    addToDisplay(value)
+    currentExpression += value
 }
 
 function splitExpression (expression) {
@@ -294,21 +297,26 @@ function splitExpression (expression) {
     const result = []
 
     for (let i = 0; i < numbers.length; i++) {
-        if (numbers[i] === '') {
+        if (numbers[i] === '' && i === 0) {
             i++
             result.push((operators[i - 1] + numbers[i]))
+        } else if (isNaN(parseFloat(numbers[i]))) {
+            continue
         } else { result.push(numbers[i]) }
 
         if (i < operators.length) {
-            if (operators[i].match(RegExp('[+\\-*/=]-'))) {
+            if (operators[i].match(RegExp(/[+\-*/=]-/))) {
                 const operatorsArray = operators[i].split('')
                 i++
 
                 result.push(operatorsArray[0])
                 result.push(operatorsArray[1] + numbers[i])
-            } else { result.push(operators[i]) }
+            } else {
+                if (operators[i]) {
+                    result.push(operators[i])
+                }
+            }
         }
     }
-
     return result
 }
