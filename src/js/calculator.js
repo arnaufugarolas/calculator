@@ -200,12 +200,13 @@ function calculate () {
 
     if (nonDecimal.length > 10) {
         result = 'ERROR'
+    } else if (expression.match(/\/0/)) {
+        result = 'ERROR'
     } else {
         const maxDecimal = 10 - nonDecimal.length
         result = parseFloat(parseFloat(result).toFixed(maxDecimal))
+        result = result.toString().replace('.', ',')
     }
-
-    result = result.toString().replace('.', ',')
 
     document.getElementById('display').value = result
     currentExpression += '=' + result

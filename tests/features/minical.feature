@@ -250,3 +250,15 @@ Feature: Calculator
       | 123         | -      | -24,8        | 147,8         | *       | 12          | 1773,6         |
       | 1234567890  | /      | -2,5         | -493827156    | -       | 147         | -493827303     |
 
+  Scenario Outline: Division with 0
+    Given the display has the value: <numberOnScreen>
+    And the user press the button: /
+    And the user writes the number: 0
+    When the user press the button: =
+    Then in the display screen should be show: ERROR
+
+    Examples:
+      |numberOnScreen|
+      |             1|
+      |            -1|
+      |             0|
