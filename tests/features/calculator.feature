@@ -182,9 +182,9 @@ Feature: Calculator
         Then the display should show the following value: "<secondUserNumber>"
 
         Examples:
-            | displayNumber | button | userNumber | displayResult | secondUserNumber |
-            |          12,2 |      + |          6 |          18,2 |               13 |
-            |    1234567890 |      + |          1 |    1234567891 |              -24 |
+            | displayNumber | button | userNumber | secondUserNumber |
+            |          12,2 |      + |          6 |               13 |
+            |    1234567890 |      + |          1 |              -24 |
 
     Scenario Outline: Using the previous result in a new operation
         Given the display shows the following value: "<displayNumber>"
