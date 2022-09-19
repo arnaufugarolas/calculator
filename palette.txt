@@ -1,4 +1,4 @@
-/* Coolors Exported Palette - https://coolors.co/d8dbe2-a9bcd0-58a4b0-373f51-1b1b1e */
+/* Colors Exported Palette - https://coolors.co/d8dbe2-a9bcd0-58a4b0-373f51-1b1b1e */
 
 /* CSV */
 d8dbe2,a9bcd0,58a4b0,373f51,1b1b1e

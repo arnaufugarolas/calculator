@@ -135,7 +135,7 @@ Feature: Calculator
             |         13,14 |      * |      2,781 |
             |            84 |      / |       -4,3 |
 
-    Scenario Outline: Performing two number operations with a result number with more than 10 nondecimal digits
+    Scenario Outline: Performing two number operations with a result number with more than 10 nonDecimal digits
         Given the display shows the following value: "<displayNumber>"
         And the user presses the "<button>" button
         And the user writes the number: "<userNumber>"
@@ -265,7 +265,7 @@ Feature: Calculator
             |            10 |            10 |
             |          -10, |           -10 |
 
-    Scenario Outline: Reenabling buttons with no error
+    Scenario Outline: Re enabling buttons with no error
         Given the display shows the following value: "1234567890"
         When the user presses the "<button>" button
         Then the "0" button should be enabled
@@ -292,7 +292,7 @@ Feature: Calculator
             |   *  |
             |   /  |
 
-    Scenario Outline: Reenabling buttons with no error
+    Scenario Outline: Re enabling buttons with no error
         Given the display shows the following value: "1234567890"
         When the user presses the "<button>" button
         Then the "0" button should be disabled
@@ -316,7 +316,7 @@ Feature: Calculator
             |button|
             |   C  |
 
-    Scenario Outline: Reenabling buttons with no error
+    Scenario Outline: Re enabling buttons with no error
         Given the display shows the following value: "1234567890"
         When the user presses the "<button>" button
         Then the "0" button should be enabled
@@ -389,7 +389,7 @@ Feature: Calculator
         And the "=" button should be disabled
         And the "C" button should be enabled
 
-    Scenario: Reenabling buttons with error
+    Scenario: Re enabling buttons with error
         Given the display shows the following value: "1"
         And the user presses the "/" button
         And the user writes the number: "0"
