@@ -1,11 +1,12 @@
-window.addEventListener('load', loadCalculator)
+/**
+ *  Adding an event listener to the window object. When the window loads, it will call the function that is passed to it.
+ */
+window.addEventListener('load', function () {
+    window.globalThis.currentExpression = ''
 
-let currentExpression = ''
-
-function loadCalculator () {
     resetDisplay()
     addEvents()
-}
+})
 
 /**
  * It adds event listeners to all the buttons and the keyboard
@@ -85,7 +86,7 @@ function addEvents () {
 }
 
 /**
- * `resetDisplay` resets the display to 0 and unhighlights all keys.
+ * `resetDisplay` resets the display to 0 and unHighlights all keys.
  */
 function resetDisplay () {
     setDisplay('0')
@@ -98,7 +99,7 @@ function resetDisplay () {
  */
 function checkDisplay () {
     const display = document.getElementById('display')
-    const expression = splitExpression(currentExpression)
+    const expression = splitExpression(window.globalThis.currentExpression)
     const lastNumber = expression[expression.length - 1]
 
     if (display.value === '0') {
@@ -106,7 +107,7 @@ function checkDisplay () {
         changeOperatorsState(true)
         changeKeyState('+/-', false)
         changeKeyState('0', false)
-    } else if (currentExpression.match(/=/)) {
+    } else if (window.globalThis.currentExpression.match(/=/)) {
         changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState(',', false)
@@ -122,7 +123,7 @@ function checkDisplay () {
         changeNumbersState(true)
         changeOperatorsState(true)
         changeKeyState(',', false)
-    } else if (currentExpression === 'ERROR') {
+    } else if (window.globalThis.currentExpression.toString() === 'ERROR') {
         changeNumbersState(false)
         changeOperatorsState(false)
         changeKeyState('C', true)
@@ -138,7 +139,7 @@ function checkDisplay () {
  */
 function setDisplay (value) {
     document.getElementById('display').value = value
-    currentExpression = value
+    window.globalThis.currentExpression = value
 }
 
 /**
@@ -147,7 +148,7 @@ function setDisplay (value) {
  */
 function addToDisplay (value) {
     document.getElementById('display').value += value
-    currentExpression += value
+    window.globalThis.currentExpression += value
 }
 
 /**
@@ -156,8 +157,8 @@ function addToDisplay (value) {
  * @param value - The value to be added to the display.
  */
 function replaceLastCharacterOnDisplay (value) {
-    currentExpression = currentExpression.slice(0, -1)
-    currentExpression += value
+    window.globalThis.currentExpression = window.globalThis.currentExpression.slice(0, -1)
+    window.globalThis.currentExpression += value
 }
 
 /**
@@ -182,22 +183,22 @@ function addPoint () {
 function addNumber (number) {
     const display = document.getElementById('display')
 
-    if (currentExpression === '0' || currentExpression.match('=')) {
+    if (window.globalThis.currentExpression.toString() === '0' || window.globalThis.currentExpression.match('=')) {
         setDisplay(number)
-    } else if (currentExpression === '-') {
+    } else if (window.globalThis.currentExpression.toString() === '-') {
         addToDisplay(number)
-    } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
-        const length = currentExpression.length - 2
+    } else if (window.globalThis.currentExpression[window.globalThis.currentExpression.length - 1].match(/[+\-*/]/)) {
+        const length = window.globalThis.currentExpression.length - 2
         if (length >= 0) {
-            if (currentExpression[length].match(/[+\-*/]/)) {
+            if (window.globalThis.currentExpression[length].match(/[+\-*/]/)) {
                 addToDisplay(number)
             } else {
                 display.value = number
-                currentExpression += number
+                window.globalThis.currentExpression += number
             }
         } else {
             display.value = number
-            currentExpression += number
+            window.globalThis.currentExpression += number
         }
     } else {
         if (display.value.replace(/[^0-9]/g, '').length < 10) {
@@ -216,27 +217,27 @@ function addNumber (number) {
  */
 function addOperator (operator) {
     const display = document.getElementById('display')
-    const expression = splitExpression(currentExpression)
+    const expression = splitExpression(window.globalThis.currentExpression)
 
     if (expression.length === 3) {
         calculate()
     }
 
-    if (currentExpression.match('=')) {
-        currentExpression = currentExpression.split('=')[1]
+    if (window.globalThis.currentExpression.match('=')) {
+        window.globalThis.currentExpression = window.globalThis.currentExpression.split('=')[1]
     }
-    if (currentExpression === '0' && operator === '-') {
+    if (window.globalThis.currentExpression.toString() === '0' && operator === '-') {
         setDisplay(operator)
-    } else if (currentExpression[currentExpression.length - 1].match(/[+\-*/]/)) {
+    } else if (window.globalThis.currentExpression[window.globalThis.currentExpression.length - 1].match(/[+\-*/]/)) {
         if (operator === '-') {
             display.value = operator
-            currentExpression += operator
+            window.globalThis.currentExpression += operator
         } else {
             replaceLastCharacterOnDisplay(operator)
             highlightKey(operator)
         }
     } else {
-        currentExpression += operator
+        window.globalThis.currentExpression += operator
         highlightKey(operator)
     }
     checkDisplay()
@@ -246,7 +247,7 @@ function addOperator (operator) {
  * It takes the last number of the current expression, changes its sign and updates the display
  */
 function changeSign () {
-    const splitedExpression = splitExpression(currentExpression)
+    const splitedExpression = splitExpression(window.globalThis.currentExpression)
     let numberToChange = splitedExpression[splitedExpression.length - 1].toString().replace(/,/g, '.')
 
     if (numberToChange.match(/\.$/)) {
@@ -257,7 +258,7 @@ function changeSign () {
 
     splitedExpression[splitedExpression.length - 1] = numberToChange
     document.getElementById('display').value = numberToChange
-    currentExpression = splitedExpression.join('')
+    window.globalThis.currentExpression = splitedExpression.join('')
 }
 
 /**
@@ -284,22 +285,37 @@ function unHighlightKeys () {
 }
 
 /**
- * It takes the current expression, replaces all commas with dots, replaces all double minus signs with plus signs, checks
- * if the expression ends with an operator or if it contains a division by zero, and if not, it evaluates the expression
- * and displays the result
+ * It takes the current expression, replaces commas with dots, replaces double minus signs with plus signs, splits the
+ * expression into an array of numbers and operators, calculates the result, and displays it
  */
 function calculate () {
-    let expression = currentExpression
+    let expression = window.globalThis.currentExpression
     let result
-    expression = expression.replaceAll(',', '.')
-    expression = expression.replaceAll('--', '+')
+    expression = expression.replace(/,/g, '.')
+    expression = expression.replace(/--/g, '+')
 
     if (expression.match(/\/0/) || expression.match(/[+\-*/]$/)) {
         result = 'ERROR'
     } else {
-        // eslint-disable-next-line no-eval
-        result = eval(expression).toString()
+        const splitedExpression = splitExpression(expression)
 
+        if (splitedExpression.length === 3) {
+            const number1 = parseFloat(splitedExpression[0])
+            const number2 = parseFloat(splitedExpression[2])
+            const operator = splitedExpression[1]
+
+            if (operator === '/') {
+                result = (number1 / number2).toString()
+            } else if (operator === '*') {
+                result = (number1 * number2).toString()
+            } else if (operator === '+') {
+                result = (number1 + number2).toString()
+            } else if (operator === '-') {
+                result = (number1 - number2).toString()
+            }
+        } else {
+            result = expression
+        }
         const nonDecimal = result.split('.')[0]
 
         if (nonDecimal.length > 10) {
@@ -314,7 +330,7 @@ function calculate () {
         setDisplay(result)
     } else {
         document.getElementById('display').value = result
-        currentExpression += '=' + result
+        window.globalThis.currentExpression += `=${result}`
     }
 
     unHighlightKeys()
@@ -371,11 +387,9 @@ function changeNumbersState (state) {
  */
 function splitExpression (expression) {
     const copy = expression
-    const baseExpression = expression.replace(/[0-9]+/g, '#').replace(/[(|,)]/g, '')
-    const numbers = copy.split(/[^0-9,]+/)
-    const operators = baseExpression.split('#').filter(function (n) {
-        return n
-    })
+    const baseExpression = expression.replace(/[0-9]+/g, '#').replace(/[(|.,)]/g, '')
+    const numbers = copy.split(/[^0-9.,]+/)
+    const operators = baseExpression.split('#').filter(function (n) { return n })
     const result = []
 
     for (let i = 0; i < numbers.length; i++) {
